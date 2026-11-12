@@ -1,0 +1,948 @@
+/* ------------------------------------------------------------------ *
+ * Checkout page — Stage 3 checkout boards (desktop 1440, mobile 390,
+ * tablet 768, Arabic RTL review). Logical properties throughout.
+ * ------------------------------------------------------------------ */
+
+.main {
+  flex: 1;
+  max-width: var(--hw-content-max);
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 22px var(--hw-gutter) 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.headRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px 32px;
+}
+
+.headTitles {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+
+.headline {
+  margin: 0;
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: clamp(40px, 4vw, 52px);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+
+.itemsText {
+  font-size: 16px;
+  color: var(--hw-text-secondary);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.continueLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 15px;
+  color: var(--hw-text-primary);
+  text-decoration: none;
+}
+
+.stepper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--hw-text-muted);
+}
+
+.stepperText {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stepperText strong {
+  color: var(--hw-text-primary);
+}
+
+/* Four segments, filled up to the current step (checkout boards). */
+.stepperBar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  max-width: 720px;
+}
+
+.stepperSeg {
+  padding-top: 8px;
+  border-top: 4px solid var(--hw-border-default);
+  font-size: 12px;
+  color: var(--hw-text-muted);
+}
+
+.stepperSegDone {
+  border-top-color: var(--hw-text-primary);
+  color: var(--hw-text-primary);
+  font-weight: 600;
+}
+
+/* Collapsed summary toggle: narrow layout only. */
+.summaryToggle {
+  display: none;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+/* The current step is the open card; the others are collapsed rows. */
+.stepList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stepCurrent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stepRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  padding: 0 22px;
+  border-radius: var(--hw-radius-overlay);
+  background: var(--hw-bg-muted);
+  font-family: var(--hw-font-display);
+  font-size: 20px;
+  color: var(--hw-text-muted);
+}
+
+.stepNum {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--hw-border-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  font-family: var(--hw-font-ui);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.stepNumDone {
+  background: var(--hw-text-primary);
+  box-shadow: none;
+  color: var(--hw-text-on-dark);
+}
+
+.stepRowLabel {
+  flex: 1;
+}
+
+.stepRowEdit {
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  font-family: var(--hw-font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.stepNav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.stepNavTotal {
+  display: none;
+}
+
+.stepperDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--hw-border-default);
+}
+
+.stepperDot.done {
+  background: var(--hw-status-available);
+}
+
+.stepperSep {
+  color: var(--hw-text-muted);
+}
+
+.columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+/* Board: steps on the start side, a narrow sticky summary on the end side. */
+.summaryColumn {
+  width: 360px;
+  flex: none;
+  min-width: 0;
+  position: sticky;
+  top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 899px) {
+  .columns {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  /* Collapsed behind the toggle; opens above the steps. */
+  .summaryColumn {
+    position: static;
+    width: 100%;
+    order: -1;
+    display: none;
+  }
+
+  .summaryColumnOpen {
+    display: flex;
+  }
+
+  .summaryToggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: -22px calc(-1 * var(--hw-gutter)) 0;
+    padding: 12px var(--hw-gutter);
+    border: 0;
+    border-bottom: 1px solid var(--hw-border-default);
+    background: transparent;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--hw-text-primary);
+    cursor: pointer;
+  }
+
+  .summaryToggleLabel {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .summaryToggleTotal {
+    margin-inline-start: auto;
+    font-size: 16px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .headline {
+    font-size: 34px;
+  }
+
+  .stepRow {
+    padding: 0 16px;
+    font-size: 18px;
+  }
+
+  /* Sticky "Total so far" bar with the step action (checkout mobile board). */
+  .stepNav {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    margin: 0 calc(-1 * var(--hw-gutter));
+    padding: 10px var(--hw-gutter) 12px;
+    background: rgba(250, 248, 244, 0.97);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 -1px 0 var(--hw-border-default);
+  }
+
+  .stepNavTotal {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--hw-text-secondary);
+  }
+
+  .stepNavTotal bdi {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--hw-text-primary);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  .stepNav .btnPrimary {
+    grid-column: -2;
+    width: 100%;
+  }
+}
+
+/* Demo notice */
+.demoNote {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--hw-text-muted);
+  border-top: 1px solid var(--hw-border-default);
+  padding-top: 14px;
+}
+
+/* Address cards */
+.addressList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.addressCard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border-radius: var(--hw-radius-md);
+  border: 1.5px solid var(--hw-border-default);
+  background: var(--hw-bg-surface);
+  cursor: pointer;
+  transition: border-color var(--hw-motion-fast) var(--hw-easing);
+}
+
+@media (hover: hover) {
+  .addressCard:hover {
+    border-color: var(--hw-action-primary);
+  }
+}
+
+.addressCard.selected {
+  border-color: var(--hw-action-primary);
+  background: var(--hw-bg-well-cool);
+}
+
+.addressRadio {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--hw-action-secondary);
+  flex: none;
+}
+
+.addressBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.addressLabel {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+}
+
+.addressLines {
+  font-size: 14px;
+  color: var(--hw-text-secondary);
+  line-height: 1.45;
+}
+
+.addressDefaultPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-status-available-bg);
+  color: var(--hw-status-available);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  flex: none;
+  align-self: flex-start;
+}
+
+.addAddressBtn {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--hw-action-secondary);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+  cursor: pointer;
+}
+
+.addAddressBtn:hover {
+  box-shadow: inset 0 0 0 1.5px var(--hw-action-primary);
+  color: var(--hw-action-primary);
+}
+
+/* Form */
+.section {
+  margin: 0;
+  padding: 22px 28px;
+  border-radius: var(--hw-radius-overlay);
+  background: var(--hw-bg-surface);
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+}
+
+.sectionTitle {
+  margin: 0 0 12px;
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: clamp(23px, 2vw, 26px);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
+
+.sectionIntro {
+  margin: 0 0 20px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--hw-text-secondary);
+  max-width: 600px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+  min-width: 0;
+}
+
+.fieldLabel {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.fieldLabelMuted {
+  font-weight: 400;
+  color: var(--hw-text-muted);
+}
+
+.textField {
+  height: 48px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 14px;
+  border: 1.5px solid var(--hw-border-input);
+  border-radius: 10px;
+  background: var(--hw-bg-surface);
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--hw-text-primary);
+}
+
+.textFieldInvalid {
+  border-color: var(--hw-status-error);
+}
+
+.fieldError {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--hw-status-error);
+}
+
+.fieldHelp {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--hw-text-subtle);
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: 16px;
+}
+
+.selectWrap {
+  position: relative;
+}
+
+.selectWrap select {
+  appearance: none;
+  width: 100%;
+  height: 48px;
+  padding: 0 40px 0 14px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--hw-border-input);
+  border-radius: 10px;
+  background: var(--hw-bg-surface);
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--hw-text-primary);
+  cursor: pointer;
+}
+
+.selectChevron {
+  position: absolute;
+  inset-inline-end: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+}
+
+.radioList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.radioItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.radioItem input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--hw-action-secondary);
+  flex: none;
+}
+
+.radioLabel {
+  font-size: 15px;
+  color: var(--hw-text-primary);
+  cursor: pointer;
+}
+
+.radioPrice {
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--hw-text-secondary);
+}
+
+.radioDefaultPill {
+  margin-inline-start: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-status-available-bg);
+  color: var(--hw-status-available);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.radioDesc {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--hw-text-muted);
+}
+
+/* Buttons */
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-action-primary);
+  color: var(--hw-text-on-dark);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter var(--hw-motion-fast) var(--hw-easing);
+}
+
+.btnPrimary:disabled {
+  background: var(--hw-bg-disabled);
+  color: var(--hw-text-muted);
+  cursor: not-allowed;
+}
+
+@media (hover: hover) {
+  .btnPrimary:not(:disabled):hover {
+    filter: brightness(0.9);
+  }
+}
+
+.btnOutline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--hw-action-secondary);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btnOutline:hover {
+  box-shadow: inset 0 0 0 1.5px var(--hw-action-primary);
+  color: var(--hw-action-primary);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+/* Order summary card */
+.summaryCard {
+  background: var(--hw-bg-surface);
+  border-radius: var(--hw-radius-overlay);
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+  overflow: hidden;
+}
+
+.summaryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--hw-border-card);
+}
+
+.summaryHeader h2 {
+  margin: 0;
+  font-family: var(--hw-font-display);
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--hw-text-primary);
+}
+
+.summaryItems {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--hw-border-card);
+}
+
+/*
+ * Image | name and variant | price, with the struck-through "was" price under
+ * the line price. A plain flex row squeezed the name to one word per line at
+ * 390 px and let the quantity overlap it.
+ */
+.summaryItem {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  grid-template-rows: auto 1fr;
+  column-gap: 14px;
+  row-gap: 2px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--hw-border-card);
+}
+
+.summaryItem > .summaryItemImage {
+  grid-row: 1 / span 2;
+}
+
+.summaryItem > .summaryItemBody {
+  grid-row: 1 / span 2;
+}
+
+.summaryItem > .summaryItemQtyPrice {
+  grid-column: 3;
+  justify-self: end;
+  white-space: nowrap;
+}
+
+.summaryItem > .summaryItemWas {
+  grid-column: 3;
+  grid-row: 2;
+  justify-self: end;
+  align-self: start;
+}
+
+.summaryItemImage {
+  position: relative;
+  width: 64px;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--hw-radius-sm);
+  overflow: hidden;
+  background: var(--hw-bg-well);
+  flex: none;
+}
+
+.summaryItemBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.summaryItemName {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+  line-height: 1.4;
+}
+
+.summaryItemVariant {
+  font-size: 13px;
+  color: var(--hw-text-secondary);
+  line-height: 1.4;
+}
+
+.summaryItemQtyPrice {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 15px;
+  color: var(--hw-text-primary);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.summaryItemWas {
+  font-size: 13px;
+  color: var(--hw-text-muted);
+  text-decoration: line-through;
+}
+
+.summaryTotals {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.summaryTotalRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 15px;
+  color: var(--hw-text-secondary);
+}
+
+.summaryTotalRow strong {
+  color: var(--hw-text-primary);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.summaryGrand {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--hw-border-card);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--hw-text-primary);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.summaryNote {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--hw-text-muted);
+  padding: 16px 24px;
+  border-top: 1px solid var(--hw-border-card);
+}
+
+/* Result states */
+.resultCard {
+  background: var(--hw-bg-surface);
+  border-radius: var(--hw-radius-overlay);
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 560px;
+}
+
+.resultIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--hw-bg-well-cool);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.resultTitle {
+  margin: 0;
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: clamp(30px, 3vw, 40px);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
+
+.resultBody {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--hw-text-secondary);
+}
+
+.resultOrderNo {
+  font-family: var(--hw-font-display);
+  font-weight: 600;
+  font-size: 18px;
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--hw-text-primary);
+}
+
+.demoAlert {
+  display: flex;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: var(--hw-radius-md);
+  background: var(--hw-status-attention-bg);
+  color: #5e3e08;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Spinner */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--hw-border-default);
+  border-top-color: var(--hw-action-primary);
+  border-radius: 50%;
+  animation: hwSpin 0.9s linear infinite;
+  flex: none;
+}
+
+@keyframes hwSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.numerals {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.arTheme {
+  font-family: var(--hw-font-arabic-ui);
+}
+
+.headlineAr {
+  font-family: var(--hw-font-arabic-display);
+}
+
+.textArea {
+  min-height: 88px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1.5px solid var(--hw-border-input);
+  border-radius: 10px;
+  background: var(--hw-bg-surface);
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--hw-text-primary);
+  resize: vertical;
+}
+
+.phoneRow {
+  display: flex;
+  gap: 8px;
+}
+
+.phoneRow .phoneField {
+  flex: 1;
+  min-width: 0;
+}
+
+.countryChip {
+  flex: none;
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 14px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background: var(--hw-bg-muted);
+  font-size: 16px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 36px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.checkRow input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--hw-action-secondary);
+  flex: none;
+}

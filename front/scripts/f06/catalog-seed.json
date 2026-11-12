@@ -1,0 +1,628 @@
+{
+  "_note": "Approved F06 test catalog: derived from the Stage 1/2 design-board sample catalogue (names, prices, brands, categories, SKUs). Loaded into the isolated hc_f06_frontend_dev database through the admin API by scripts/f06/seed-catalog.mjs. Not production data.",
+  "currency": "EGP",
+  "categories": [
+    {
+      "slug": "cookware",
+      "name": "Cookware"
+    },
+    {
+      "slug": "tableware",
+      "name": "Tableware"
+    },
+    {
+      "slug": "bakeware",
+      "name": "Bakeware"
+    },
+    {
+      "slug": "kitchen-tools",
+      "name": "Kitchen tools"
+    },
+    {
+      "slug": "storage",
+      "name": "Storage"
+    },
+    {
+      "slug": "textiles",
+      "name": "Textiles"
+    },
+    {
+      "slug": "coffee-and-tea",
+      "name": "Coffee & tea"
+    },
+    {
+      "slug": "sets-and-bundles",
+      "name": "Sets & bundles"
+    }
+  ],
+  "brands": [
+    {
+      "slug": "atelier-nile",
+      "name": "Atelier Nile"
+    },
+    {
+      "slug": "olea",
+      "name": "Olea"
+    },
+    {
+      "slug": "kiln-studio",
+      "name": "Kiln Studio"
+    },
+    {
+      "slug": "brew-works",
+      "name": "Brew Works"
+    },
+    {
+      "slug": "delta-linen",
+      "name": "Delta Linen"
+    },
+    {
+      "slug": "clearline",
+      "name": "Clearline"
+    }
+  ],
+  "products": [
+    {
+      "slug": "enamelled-cast-iron-casserole",
+      "name": "Enamelled Cast-Iron Casserole",
+      "description": "A tight-lid casserole that braises, roasts and serves. The terracotta enamel wears the hob heat with patience.",
+      "category": "cookware",
+      "brand": "atelier-nile",
+      "basePriceMinor": 570000,
+      "discountBasisPoints": 1500,
+      "variants": [
+        {
+          "sku": "HC-CI-CAS-24-TER",
+          "color": "Terracotta",
+          "size": "24 cm · 4.2 L",
+          "position": 0,
+          "material": "Cast iron"
+        },
+        {
+          "sku": "HC-CI-CAS-24-SAG",
+          "color": "Sage",
+          "size": "24 cm · 4.2 L",
+          "position": 1,
+          "material": "Cast iron"
+        },
+        {
+          "sku": "HC-CI-CAS-24-CRE",
+          "color": "Cream",
+          "size": "24 cm · 4.2 L",
+          "position": 2,
+          "material": "Cast iron"
+        },
+        {
+          "sku": "HC-CI-CAS-28-TER",
+          "color": "Terracotta",
+          "size": "28 cm · 6.7 L",
+          "position": 3,
+          "material": "Cast iron"
+        },
+        {
+          "sku": "HC-CI-CAS-28-SAG",
+          "color": "Sage",
+          "size": "28 cm · 6.7 L",
+          "position": 4,
+          "material": "Cast iron"
+        },
+        {
+          "sku": "HC-CI-CAS-28-CRE",
+          "color": "Cream",
+          "size": "28 cm · 6.7 L",
+          "position": 5,
+          "material": "Cast iron"
+        }
+      ],
+      "images": [
+        {
+          "url": "/images/cookware-casserole.webp",
+          "altText": "Enamelled cast-iron casserole in terracotta",
+          "position": 0
+        },
+        {
+          "url": "/images/cookware-casserole.webp",
+          "altText": "Enamelled cast-iron casserole in terracotta",
+          "position": 1
+        },
+        {
+          "url": "/images/casserole-top-view.webp",
+          "altText": "Enamelled cast-iron casserole seen from above",
+          "position": 2
+        },
+        {
+          "url": "/images/casserole-lid-off.webp",
+          "altText": "Casserole lid off, showing the cream enamel interior",
+          "position": 3
+        },
+        {
+          "url": "/images/casserole-handle-closeup.webp",
+          "altText": "Close-up of the casserole handle and lid rim",
+          "position": 4
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Material",
+          "value": "Enamelled cast iron",
+          "position": 0
+        },
+        {
+          "name": "Capacity",
+          "value": "4.2 L (24 cm) · 6.7 L (28 cm)",
+          "position": 1
+        },
+        {
+          "name": "Diameter",
+          "value": "24 cm or 28 cm",
+          "position": 2
+        },
+        {
+          "name": "Oven safe",
+          "value": "To 250 °C",
+          "position": 3
+        },
+        {
+          "name": "Hob types",
+          "value": "Gas, electric, induction",
+          "position": 4
+        },
+        {
+          "name": "Care",
+          "value": "Dishwasher safe",
+          "position": 5
+        }
+      ]
+    },
+    {
+      "slug": "olive-wood-serving-board",
+      "name": "Olive Wood Serving Board",
+      "description": "One piece of oil-finished olive wood, cut so the grain carries the board along its whole length.",
+      "category": "kitchen-tools",
+      "brand": "olea",
+      "basePriceMinor": 125000,
+      "discountBasisPoints": 0,
+      "variants": [
+        {
+          "sku": "HC-KT-BRD-45-OLV",
+          "color": null,
+          "size": null,
+          "position": 0,
+          "material": "Olive wood"
+        }
+      ],
+      "images": [
+        {
+          "url": "/images/kitchen-tools-board.webp",
+          "altText": "Olive wood serving board with handle",
+          "position": 0
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Material",
+          "value": "Olive wood",
+          "position": 0
+        },
+        {
+          "name": "Size",
+          "value": "45 × 22 cm",
+          "position": 1
+        },
+        {
+          "name": "Finish",
+          "value": "Food-safe oil",
+          "position": 2
+        },
+        {
+          "name": "Colour",
+          "value": "Natural wood",
+          "position": 3
+        }
+      ]
+    },
+    {
+      "slug": "stoneware-dinner-plates-set-of-4",
+      "name": "Stoneware Dinner Plates, Set of 4",
+      "description": "Four 27 cm plates in a soft oat glaze; the flat rim gives stews a picture frame.",
+      "category": "tableware",
+      "brand": "kiln-studio",
+      "basePriceMinor": 168000,
+      "discountBasisPoints": 0,
+      "variants": [
+        {
+          "sku": "HC-TW-PLT-27-OAT",
+          "color": null,
+          "size": null,
+          "position": 0,
+          "material": "Stoneware"
+        }
+      ],
+      "images": [
+        {
+          "url": "/images/tableware-plates.webp",
+          "altText": "Stack of four oat stoneware plates with a bowl",
+          "position": 0
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Material",
+          "value": "Stoneware",
+          "position": 0
+        },
+        {
+          "name": "Diameter",
+          "value": "27 cm",
+          "position": 1
+        },
+        {
+          "name": "Set",
+          "value": "4 plates",
+          "position": 2
+        },
+        {
+          "name": "Care",
+          "value": "Dishwasher safe",
+          "position": 3
+        },
+        {
+          "name": "Colour",
+          "value": "Cream & oat",
+          "position": 4
+        }
+      ]
+    },
+    {
+      "slug": "stoneware-mug-350ml",
+      "name": "Stoneware Mug, 350 ml",
+      "description": "A speckled glaze mug with a comfortable loop handle; the sage enamel is the daily horizon of the table.",
+      "category": "tableware",
+      "brand": "kiln-studio",
+      "basePriceMinor": 38000,
+      "discountBasisPoints": 0,
+      "variants": [
+        {
+          "sku": "HC-TW-MUG-350-SAG",
+          "color": "Sage",
+          "size": null,
+          "position": 0,
+          "material": "Stoneware"
+        },
+        {
+          "sku": "HC-TW-MUG-350-CRE",
+          "color": "Cream",
+          "size": null,
+          "position": 1,
+          "material": "Stoneware"
+        }
+      ],
+      "images": [
+        {
+          "url": "/images/mugs-stoneware.webp",
+          "altText": "Two stoneware mugs in sage and cream",
+          "position": 0
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Material",
+          "value": "Stoneware",
+          "position": 0
+        },
+        {
+          "name": "Capacity",
+          "value": "350 ml",
+          "position": 1
+        },
+        {
+          "name": "Colours",
+          "value": "Sage, cream",
+          "position": 2
+        },
+        {
+          "name": "Care",
+          "value": "Dishwasher safe",
+          "position": 3
+        }
+      ]
+    },
+    {
+      "slug": "stoneware-baking-dish-30cm",
+      "name": "Stoneware Baking Dish, 30 cm",
+      "description": "A matte oat glaze dish for lasagnas, roasted vegetables and gratins — goes from the oven straight to the table.",
+      "category": "bakeware",
+      "brand": "kiln-studio",
+      "basePriceMinor": 115000,
+      "discountBasisPoints": 0,
+      "variants": [
+        {
+          "sku": "HC-BW-DSH-30-OAT",
+          "color": null,
+          "size": null,
+          "position": 0,
+          "material": "Stoneware"
+        }
+      ],
+      "images": [
+        {
+          "url": "/images/bakeware.webp",
+          "altText": "Cream stoneware baking dish",
+          "position": 0
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Material",
+          "value": "Stoneware",
+          "position": 0
+        },
+        {
+          "name": "Size",
+          "value": "30 × 20 cm",
+          "position": 1
+        },
+        {
+          "name": "Oven safe",
+          "value": "To 240 °C",
+          "position": 2
+        },
+        {
+          "name": "Care",
+          "value": "Dishwasher safe",
+          "position": 3
+        },
+        {
+          "name": "Colour",
+          "value": "Cream & oat",
+          "position": 4
+        }
+      ]
+    },
+    {
+      "slug": "steel-hand-coffee-grinder",
+      "name": "Steel Hand Coffee Grinder",
+      "description": "A steel body around a ceramic burr — thirty turns of the walnut knob and the grind is ready.",
+      "category": "coffee-and-tea",
+      "brand": "brew-works",
+      "basePriceMinor": 145000,
+      "discountBasisPoints": 0,
+      "variants": [
+        {
+          "sku": "HC-CT-GRD-25-STL",
+          "color": null,
+          "size": null,
+          "position": 0,
+          "material": "Steel"
+        }
+      ],
+      "images": [
+        {
+          "url": "/images/coffee-and-tea.webp",
+          "altText": "Brushed steel hand coffee grinder",
+          "position": 0
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Material",
+          "value": "Steel · ceramic burr",
+          "position": 0
+        },
+        {
+          "name": "Capacity",
+          "value": "25 g",
+          "position": 1
+        },
+        {
+          "name": "Grind",
+          "value": "Coarse to fine",
+          "position": 2
+        },
+        {
+          "name": "Colour",
+          "value": "Steel",
+          "position": 3
+        }
+      ]
+    },
+    {
+      "slug": "linen-tea-towels-set-of-3",
+      "name": "Linen Tea Towels, Set of 3",
+      "description": "Washed linen that dries glass without streaks. One in each colour, ready for the daily round of the kitchen.",
+      "category": "textiles",
+      "brand": "delta-linen",
+      "basePriceMinor": 80000,
+      "discountBasisPoints": 2000,
+      "variants": [
+        {
+          "sku": "HC-TX-TOW-3-OAT",
+          "color": null,
+          "size": null,
+          "position": 0,
+          "material": "Linen"
+        }
+      ],
+      "images": [
+        {
+          "url": "/images/textiles-towels.webp",
+          "altText": "Linen tea towels in oat, terracotta and sage",
+          "position": 0
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Material",
+          "value": "Machine-woven linen",
+          "position": 0
+        },
+        {
+          "name": "Size",
+          "value": "50 × 70 cm each",
+          "position": 1
+        },
+        {
+          "name": "Set",
+          "value": "3 towels",
+          "position": 2
+        },
+        {
+          "name": "Care",
+          "value": "Machine wash 40 °C",
+          "position": 3
+        },
+        {
+          "name": "Colour",
+          "value": "Oat, Terracotta, Sage",
+          "position": 4
+        }
+      ]
+    },
+    {
+      "slug": "glass-coffee-server-600ml",
+      "name": "Glass Coffee Server, 600 ml",
+      "description": "A heatproof server for two cups, with a walnut-tone handle and a drip-free spout for slow mornings.",
+      "category": "coffee-and-tea",
+      "brand": "brew-works",
+      "basePriceMinor": 72000,
+      "discountBasisPoints": 0,
+      "variants": [
+        {
+          "sku": "HC-CT-SRV-600-CLR",
+          "color": null,
+          "size": null,
+          "position": 0,
+          "material": "Glass"
+        }
+      ],
+      "images": [
+        {
+          "url": "/images/coffee-server.webp",
+          "altText": "Glass coffee server with coffee",
+          "position": 0
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Material",
+          "value": "Borosilicate glass",
+          "position": 0
+        },
+        {
+          "name": "Capacity",
+          "value": "600 ml",
+          "position": 1
+        },
+        {
+          "name": "Dishwasher",
+          "value": "Safe",
+          "position": 2
+        },
+        {
+          "name": "Colour",
+          "value": "Clear",
+          "position": 3
+        }
+      ]
+    },
+    {
+      "slug": "glass-storage-jars-set-of-3",
+      "name": "Glass Storage Jars, Set of 3",
+      "description": "Three clear jars with bamboo lids for the coffee, oats and flour that live beside the kettle.",
+      "category": "storage",
+      "brand": "clearline",
+      "basePriceMinor": 98000,
+      "discountBasisPoints": 0,
+      "variants": [
+        {
+          "sku": "HC-ST-JAR-3-CLR",
+          "color": null,
+          "size": null,
+          "position": 0,
+          "material": "Glass"
+        }
+      ],
+      "images": [
+        {
+          "url": "/images/storage-jars.webp",
+          "altText": "Three glass storage jars with bamboo lids",
+          "position": 0
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Material",
+          "value": "Borosilicate glass · bamboo lid",
+          "position": 0
+        },
+        {
+          "name": "Sizes",
+          "value": "0.5 · 0.8 · 1.2 L",
+          "position": 1
+        },
+        {
+          "name": "Set",
+          "value": "3 jars",
+          "position": 2
+        },
+        {
+          "name": "Colour",
+          "value": "Clear",
+          "position": 3
+        }
+      ]
+    },
+    {
+      "slug": "pour-over-kettle-1l",
+      "name": "Pour-Over Kettle, 1 L",
+      "description": "A gooseneck spout that pours exactly where you point it, for pour-overs that keep their tempo.",
+      "category": "coffee-and-tea",
+      "brand": "brew-works",
+      "basePriceMinor": 239000,
+      "discountBasisPoints": 0,
+      "variants": [
+        {
+          "sku": "HC-CT-KTL-1L-STL",
+          "color": null,
+          "size": null,
+          "position": 0,
+          "material": "Steel"
+        }
+      ],
+      "images": [
+        {
+          "url": "/images/kettle-pourover.webp",
+          "altText": "Brushed steel gooseneck pour-over kettle",
+          "position": 0
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Material",
+          "value": "Brushed steel",
+          "position": 0
+        },
+        {
+          "name": "Capacity",
+          "value": "1 L",
+          "position": 1
+        },
+        {
+          "name": "Spout",
+          "value": "Gooseneck",
+          "position": 2
+        },
+        {
+          "name": "Hob types",
+          "value": "Gas, electric, induction",
+          "position": 3
+        },
+        {
+          "name": "Colour",
+          "value": "Steel",
+          "position": 4
+        }
+      ]
+    }
+  ]
+}

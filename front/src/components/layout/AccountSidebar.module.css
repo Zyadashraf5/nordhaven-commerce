@@ -1,0 +1,172 @@
+/* ------------------------------------------------------------------ *
+ * Account sidebar — Stage 3 boards (wishlist/account shell). One ivory
+ * card with the greeting, the section grid and the sign-out entry.
+ * ------------------------------------------------------------------ */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background: var(--hw-bg-surface);
+  border-radius: var(--hw-radius-overlay);
+  padding: 12px;
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+  box-sizing: border-box;
+}
+
+.greeting {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px 16px;
+}
+
+.greetingName {
+  font-family: var(--hw-font-display);
+  font-size: 24px;
+  line-height: 1.15;
+}
+
+.greetingEmail {
+  font-size: 13px;
+  color: var(--hw-text-muted);
+  overflow-wrap: anywhere;
+}
+
+.nav {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2px 8px;
+}
+
+.section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  /* also used on the sign-out <button> */
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  text-align: start;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 15px;
+  color: var(--hw-text-primary);
+}
+
+.section:hover {
+  background: var(--hw-bg-well);
+}
+
+.sectionActive {
+  background: var(--hw-bg-muted);
+  font-weight: 600;
+}
+
+/* Keep the icon at full size: the Notifications row squeezed it to 0 px at 375. */
+.section svg {
+  flex: none;
+}
+
+.sectionLabel {
+  flex: 1;
+  min-width: 0;
+}
+
+.badge {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  box-sizing: border-box;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-action-primary);
+  color: var(--hw-text-on-dark);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.divider {
+  grid-column: 1 / -1;
+  height: 1px;
+  background: var(--hw-border-default);
+  margin: 8px 12px;
+}
+
+/* Mobile: the sidebar collapses to the horizontal chip row on top. */
+
+@media (max-width: 899px) {
+  .sidebar {
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .greeting {
+    padding: 14px 0 2px;
+  }
+
+  .greetingName {
+    font-size: 24px;
+  }
+
+  .greetingEmail {
+    font-size: 12px;
+  }
+
+  /* Shown on the account overview only: the board's menu list. */
+  .greeting {
+    display: none;
+  }
+
+  .nav {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--hw-border-default);
+  }
+
+  .section {
+    min-height: 56px;
+    padding: 0 4px;
+    border-radius: 0;
+    border-bottom: 1px solid var(--hw-border-default);
+    font-size: 15px;
+  }
+
+  .section::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    margin-inline-end: 4px;
+    border-top: 1.8px solid var(--hw-text-primary);
+    border-inline-end: 1.8px solid var(--hw-text-primary);
+    transform: rotate(45deg);
+    flex: none;
+  }
+
+  [dir='rtl'] .section::after {
+    transform: rotate(-45deg);
+  }
+
+  .sectionActive {
+    background: transparent;
+    font-weight: 400;
+  }
+
+  .divider {
+    margin: 4px 10px;
+  }
+
+  .badge {
+    min-width: 20px;
+    height: 20px;
+    font-size: 11px;
+  }
+}

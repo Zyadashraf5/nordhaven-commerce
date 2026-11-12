@@ -1,0 +1,23 @@
+export { InventoryModule } from './inventory.module';
+export {
+  INVENTORY_AVAILABILITY,
+  INVENTORY_BUNDLES,
+  INVENTORY_RESERVATION,
+  INVENTORY_RESTOCK,
+  type AvailabilityReading,
+  type AvailabilityTarget,
+  type BundleComposition,
+  type BundleCompositionLine,
+  type InventoryAvailability,
+  type InventoryBundles,
+  type InventoryReservation,
+  type InventoryRestock,
+  type ReservationHold,
+  type ReservationHoldRequest,
+  type ReservationState,
+  type RestockLine,
+  type RestockLineOutcome,
+  type RestockOutcome,
+  type RestockRequest,
+  type RestockTarget,
+} from './contracts';

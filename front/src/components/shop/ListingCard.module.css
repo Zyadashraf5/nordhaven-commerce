@@ -1,0 +1,440 @@
+/* ------------------------------------------------------------------ *
+ * Product Listing card — board-04 desktop / board-05 mobile card
+ * anatomy. One markup, both layouts via classes; every property is
+ * logical so the card mirrors in Arabic.
+ * ------------------------------------------------------------------ */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--hw-bg-surface);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--hw-border-card);
+}
+
+/* ---------------- media ---------------- */
+
+.media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: var(--hw-bg-well);
+  overflow: hidden;
+}
+
+.mediaLink {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.mediaLink img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------------- badges on the media ---------------- */
+
+.badgeDiscount {
+  position: absolute;
+  top: 12px;
+  inset-inline-start: 12px;
+  max-width: calc(100% - 56px);
+  padding: 5px 10px;
+  border-radius: var(--hw-radius-pill);
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--hw-text-offer);
+  color: var(--hw-text-on-dark);
+}
+
+.badgeFixed {
+  position: absolute;
+  top: 12px;
+  inset-inline-start: 12px;
+  max-width: calc(100% - 56px);
+  padding: 5px 10px;
+  border-radius: var(--hw-radius-pill);
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--hw-bg-muted);
+  color: var(--hw-text-offer);
+}
+
+.badgeDynamic {
+  position: absolute;
+  top: 12px;
+  inset-inline-start: 12px;
+  max-width: calc(100% - 56px);
+  padding: 5px 10px;
+  border-radius: var(--hw-radius-pill);
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--hw-bg-well-cool);
+  color: var(--hw-status-available);
+}
+
+.badgePreOrder {
+  position: absolute;
+  top: 12px;
+  inset-inline-start: 12px;
+  max-width: calc(100% - 56px);
+  padding: 5px 10px;
+  border-radius: var(--hw-radius-pill);
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--hw-bg-surface);
+  color: var(--hw-status-info);
+  box-shadow: 0 0 0 1px var(--hw-status-info) inset;
+}
+
+/* ---------------- wishlist heart ---------------- */
+
+.wishlist {
+  position: absolute;
+  top: 8px;
+  inset-inline-end: 8px;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.wishlistCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(250, 248, 244, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------------- body ---------------- */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 14px 16px 16px;
+  flex: 1 1 0%;
+}
+
+/* Slot 1: swatch row (variant cards) or note line. Full height kept
+   even for the note so titles align across a row, like the boards. */
+.slot {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.swatchNote {
+  font-size: 13px;
+  color: var(--hw-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.swatches {
+  display: flex;
+  align-items: center;
+}
+
+.swatch {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px rgba(36, 40, 38, 0.18);
+}
+
+.swatchDot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(36, 40, 38, 0.18);
+}
+
+.swatchSelected {
+  box-shadow: inset 0 0 0 1.5px var(--hw-text-primary);
+}
+
+/* Unavailable colour: diagonal line through the dot (−45° in LTR, the
+   board notes the angle flips to +45° in RTL). */
+.swatchStrike {
+  position: absolute;
+  width: 24px;
+  height: 1.5px;
+  background: var(--hw-text-muted);
+  transform: rotate(-45deg);
+}
+
+[dir='rtl'] .swatchStrike {
+  transform: rotate(45deg);
+}
+
+.swatchLabel {
+  font-size: 13px;
+  color: var(--hw-text-muted);
+  margin-inline-start: 6px;
+}
+
+/* ---------------- title group ---------------- */
+
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.brand {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--hw-text-muted);
+}
+
+.name {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--hw-text-primary);
+  text-decoration: none;
+}
+
+.name:hover {
+  text-decoration: underline;
+}
+
+/* ---------------- price row ---------------- */
+
+.priceRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.price {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+}
+
+.priceOffer {
+  color: var(--hw-text-offer);
+}
+
+.priceMuted {
+  color: var(--hw-text-muted);
+}
+
+.was {
+  font-size: 14px;
+  color: var(--hw-text-muted);
+}
+
+.save {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--hw-text-offer);
+}
+
+/* ---------------- availability ---------------- */
+
+.availability {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.availabilityOk {
+  color: var(--hw-status-available);
+}
+
+.availabilityInfo {
+  color: var(--hw-status-info);
+}
+
+.availabilityMuted {
+  color: var(--hw-text-muted);
+  font-weight: 500;
+}
+
+/* ---------------- action ---------------- ---------------- */
+
+.action {
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.actionSolid,
+.actionOutline,
+.actionDisabled {
+  width: 100%;
+  height: 44px;
+  border-radius: var(--hw-radius-pill);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.actionSolid {
+  border: 0;
+  background: var(--hw-bg-dark);
+  color: var(--hw-text-on-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: filter var(--hw-motion-fast) var(--hw-easing);
+}
+
+.actionSolid:hover {
+  filter: brightness(0.9);
+}
+
+.actionOutline {
+  border: 0;
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--hw-text-primary);
+  color: var(--hw-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--hw-motion-fast) var(--hw-easing);
+}
+
+.actionOutline:hover {
+  background: var(--hw-bg-muted);
+}
+
+.actionPreOrder {
+  width: 100%;
+  height: 44px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  box-shadow: inset 0 0 0 1.5px var(--hw-status-info);
+  color: var(--hw-status-info);
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actionPreOrder:hover {
+  background: var(--hw-status-info-bg);
+}
+
+.actionDisabled {
+  border: 0;
+  background: var(--hw-bg-disabled);
+  color: var(--hw-text-muted);
+  cursor: not-allowed;
+  font-size: 13px;
+  display: block;
+  line-height: 44px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* ---------------- narrow layout (board-05) ---------------- */
+
+@media (max-width: 1023px) {
+  .body {
+    padding: 10px 10px 12px;
+    gap: 7px;
+  }
+
+  .slot {
+    min-height: 30px;
+  }
+
+  .swatchNote,
+  .swatchLabel {
+    font-size: 12px;
+  }
+
+  .brand {
+    font-size: 11px;
+  }
+
+  .name {
+    font-size: 14px;
+    /* Two lines max, like the board's card rhythm. */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .price {
+    font-size: 16px;
+  }
+
+  .was {
+    font-size: 12px;
+  }
+
+  .save {
+    font-size: 12px;
+  }
+
+  .availability {
+    font-size: 12px;
+  }
+
+  .badgeDiscount,
+  .badgeFixed,
+  .badgeDynamic,
+  .badgePreOrder {
+    top: 8px;
+    inset-inline-start: 8px;
+    padding: 3px 8px;
+    font-size: 11px;
+  }
+
+  .wishlistCircle {
+    width: 32px;
+    height: 32px;
+  }
+
+  .wishlist {
+    top: 2px;
+    inset-inline-end: 2px;
+  }
+
+  .wishlistCircle svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .priceRow {
+    gap: 0 6px;
+  }
+}

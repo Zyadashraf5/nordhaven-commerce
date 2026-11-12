@@ -1,0 +1,189 @@
+openapi: 3.0.3
+info:
+  title: Nordhaven Commerce Backend Foundation API
+  version: 0.1.0
+  description: >-
+    Milestone 01 operational API contract. This contract contains no commerce-domain endpoints.
+servers:
+  - url: http://localhost:3000
+    description: Local development
+tags:
+  - name: Health
+    description: Process liveness and critical-dependency readiness
+paths:
+  /api/v1/health/live:
+    get:
+      operationId: getLiveness
+      summary: Report process liveness
+      description: Does not query PostgreSQL.
+      tags:
+        - Health
+      security: []
+      responses:
+        '200':
+          description: The process can serve probes.
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LivenessResponse'
+              example:
+                status: ok
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/health/ready:
+    get:
+      operationId: getReadiness
+      summary: Report critical-dependency readiness
+      description: >-
+        Runs a fresh bounded PostgreSQL probe. Routing infrastructure must use this endpoint and
+        must not route application traffic while it returns a non-success status.
+      tags:
+        - Health
+      security: []
+      responses:
+        '200':
+          description: The application and PostgreSQL are ready.
+          headers:
+            X-Correlation-ID:
+              $ref: '#/components/headers/CorrelationId'
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadinessResponse'
+              example:
+                status: ok
+                checks:
+                  database: up
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  headers:
+    CorrelationId:
+      description: Server-accepted or server-generated request correlation UUID.
+      required: true
+      schema:
+        type: string
+        format: uuid
+    NoStore:
+      description: Prevent caches from retaining health state.
+      required: true
+      schema:
+        type: string
+        enum:
+          - no-store
+  schemas:
+    LivenessResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - ok
+    ReadinessResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - status
+        - checks
+      properties:
+        status:
+          type: string
+          enum:
+            - ok
+        checks:
+          type: object
+          additionalProperties: false
+          required:
+            - database
+          properties:
+            database:
+              type: string
+              enum:
+                - up
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - statusCode
+        - code
+        - message
+        - correlationId
+      properties:
+        statusCode:
+          type: integer
+          minimum: 400
+          maximum: 599
+        code:
+          type: string
+          pattern: '^[A-Z][A-Z0-9_]*$'
+        message:
+          type: string
+          minLength: 1
+        correlationId:
+          type: string
+          format: uuid
+        details:
+          description: Optional non-sensitive validation details.
+          oneOf:
+            - type: object
+            - type: array
+              items: {}
+  responses:
+    NotFound:
+      description: No route exists for the requested path and version.
+      headers:
+        X-Correlation-ID:
+          $ref: '#/components/headers/CorrelationId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            statusCode: 404
+            code: ROUTE_NOT_FOUND
+            message: Route not found
+            correlationId: 8f44f65f-e86a-4fe4-9aac-07b3e6c810f7
+    ServiceUnavailable:
+      description: A critical dependency is unavailable or shutdown has begun.
+      headers:
+        X-Correlation-ID:
+          $ref: '#/components/headers/CorrelationId'
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            statusCode: 503
+            code: SERVICE_UNAVAILABLE
+            message: Service is not ready
+            correlationId: 8f44f65f-e86a-4fe4-9aac-07b3e6c810f7
+    InternalError:
+      description: An unexpected application failure occurred.
+      headers:
+        X-Correlation-ID:
+          $ref: '#/components/headers/CorrelationId'
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            statusCode: 500
+            code: INTERNAL_ERROR
+            message: Internal server error
+            correlationId: 8f44f65f-e86a-4fe4-9aac-07b3e6c810f7

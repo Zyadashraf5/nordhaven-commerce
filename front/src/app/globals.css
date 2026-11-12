@@ -1,0 +1,290 @@
+@import '../styles/tokens.css';
+
+/*
+ * Base element styles. The approved boards render the storefront on a single
+ * ivory canvas with Figtree as the UI face and Newsreader for editorial display
+ * type. Links are charcoal and turn terracotta on hover.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  /*
+   * Light-only design: refuse UA dark-mode canvas, form-control and scrollbar
+   * recoloring, and opt the page out of Chrome's Auto Dark Theme
+   * (developer.chrome.com/blog/auto-dark-theme — per-element opt-out).
+   */
+  color-scheme: only light;
+  /* Paint the root canvas with the approved ivory so overscroll never shows dark. */
+  background: var(--hw-bg-page);
+}
+
+body {
+  margin: 0;
+  background: var(--hw-bg-page);
+  color: var(--hw-text-primary);
+  font-family: var(--hw-font-ui);
+  font-size: var(--hw-text-body);
+  /*
+   * The approved boards do not set a document-level line height: every element
+   * that needs one declares it (body copy 16/26, titles, labels). Keeping the
+   * document line height "normal" reproduces the reference metrics exactly.
+   */
+  line-height: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+figure,
+fieldset,
+legend {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+fieldset {
+  border: 0;
+  min-width: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--hw-text-primary);
+  text-decoration: none;
+  transition: color var(--hw-motion-fast) var(--hw-easing);
+}
+
+a:hover {
+  color: var(--hw-text-offer);
+}
+
+:focus-visible {
+  outline: 2px solid var(--hw-text-primary);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--hw-action-primary);
+  color: var(--hw-text-inverse);
+}
+
+/* Visually hidden, still reachable by assistive technology. */
+.hw-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Keyboard skip link: hidden until focused, then pinned top-start. */
+.hw-skip-link {
+  position: absolute;
+  inset-inline-start: 12px;
+  top: 8px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-text-primary);
+  color: var(--hw-text-on-dark);
+  font-size: 14px;
+  font-weight: 600;
+  transform: translateY(-200%);
+}
+
+.hw-skip-link:focus-visible {
+  transform: none;
+  color: var(--hw-text-on-dark);
+}
+
+/*
+ * Arabic previews (lang="ar" subtrees) use the boards' Arabic faces: IBM Plex
+ * Sans Arabic for UI text and Markazi Text for headings, falling back to the
+ * Latin faces for the Latin runs (EGP amounts, SKUs, order numbers).
+ */
+[lang='ar'] {
+  font-family: 'IBM Plex Sans Arabic', Figtree, system-ui, sans-serif;
+}
+
+[lang='ar'] :is(h1, h2, h3) {
+  font-family: 'Markazi Text', Newsreader, serif;
+  font-weight: 500;
+  letter-spacing: normal;
+}
+
+/* Arrows and chevrons point along the reading direction, so mirror them in RTL. */
+[dir='rtl'] svg[data-directional] {
+  transform: scaleX(-1);
+}
+
+/* Tabular figures for prices, counts and reference numbers. */
+.numerals {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* --------------------------------------------------------------- *
+ * Type scale
+ * --------------------------------------------------------------- */
+
+.hw-display-xl {
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: var(--hw-text-display-xl);
+  line-height: var(--hw-leading-display-xl);
+  letter-spacing: -0.022em;
+}
+
+.hw-heading-1 {
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: var(--hw-text-heading-1);
+  line-height: var(--hw-leading-heading-1);
+  letter-spacing: -0.01em;
+}
+
+.hw-heading-2 {
+  font-family: var(--hw-font-display);
+  font-weight: 500;
+  font-size: var(--hw-text-heading-2);
+  line-height: var(--hw-leading-heading-2);
+}
+
+.hw-title {
+  font-size: var(--hw-text-title);
+  font-weight: 600;
+  line-height: var(--hw-leading-title);
+}
+
+.hw-body {
+  font-size: var(--hw-text-body);
+  line-height: var(--hw-leading-body);
+}
+
+.hw-label {
+  font-size: var(--hw-text-label);
+  font-weight: 600;
+  line-height: var(--hw-leading-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hw-price {
+  font-size: var(--hw-text-price);
+  font-weight: 600;
+  line-height: var(--hw-leading-price);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/*
+ * The emphasised half of a display heading. The approved boards set the weight
+ * only, so the element keeps the italic face it is written in.
+ */
+.hw-display-em {
+  font-weight: 300;
+}
+
+/* --------------------------------------------------------------- *
+ * Responsive copy
+ *
+ * The approved boards use slightly shorter copy on the narrow layout.
+ * Both variants are rendered and one is hidden per breakpoint, so the
+ * server-rendered markup stays correct for every viewport.
+ * --------------------------------------------------------------- */
+
+.hw-wide {
+  display: revert;
+}
+
+.hw-narrow {
+  display: none !important;
+}
+
+@media (max-width: 1023px) {
+  .hw-wide {
+    display: none !important;
+  }
+
+  .hw-narrow {
+    display: revert !important;
+  }
+}
+
+/* --------------------------------------------------------------- *
+ * Layout primitives
+ * --------------------------------------------------------------- */
+
+.hw-container {
+  max-width: var(--hw-content-max);
+  margin-inline: auto;
+  padding-inline: var(--hw-gutter);
+}
+
+.hw-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Horizontal scrollers (category nav, mobile chips) hide their scrollbar. */
+.hw-scroll-x {
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.hw-scroll-x::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}
+
+.nordhaven-demo-note {
+  padding: 9px 20px;
+  background: #153e35;
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.025em;
+}

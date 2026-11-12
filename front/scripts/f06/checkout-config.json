@@ -1,0 +1,30 @@
+{
+  "_note": "F06 LOCAL TEST configuration only (environment TEST, database hc_f06_frontend_dev). None of these values is an approved production shipping rule, tax rule or stock figure (HC-DEC-004 activation blockers stay open). They exist so the real checkout, order and payment-attempt contracts can be exercised end to end. Stock rows are created only where a variant has none; existing rows are never changed.",
+  "destination": {
+    "countryCode": "EG",
+    "label": "Egypt (F06 test)",
+    "taxJurisdiction": "EG",
+    "carrierCode": null
+  },
+  "shippingMethod": {
+    "code": "F06-TEST-STANDARD",
+    "label": "Standard delivery (test)",
+    "amountMinor": 0,
+    "currency": "EGP"
+  },
+  "taxRule": {
+    "jurisdiction": "EG",
+    "classification": "STANDARD",
+    "rateBasisPoints": 1400,
+    "taxInclusive": true,
+    "priority": 100,
+    "effectiveFrom": "2026-01-01T00:00:00.000Z"
+  },
+  "stock": {
+    "default": 20,
+    "overrides": {
+      "HC-CI-CAS-28-SAG": 2,
+      "HC-TW-MUG-350-CRE": 0
+    }
+  }
+}

@@ -1,0 +1,924 @@
+/* ------------------------------------------------------------------ *
+ * F05 — Admin layout shared styles.
+ * Shell per the Stage 5 admin boards: a full-height charcoal sidebar with
+ * grouped sections, a light top bar with the breadcrumb and the signed-in
+ * identity, and the ivory workspace. No storefront chrome.
+ * ------------------------------------------------------------------ */
+
+.shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 232px minmax(0, 1fr);
+  background: var(--hw-bg-page);
+}
+
+/* ---------------- sidebar ---------------- */
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 12px 24px;
+  background: var(--hw-text-primary);
+  color: var(--hw-text-inverse-muted);
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 8px 6px;
+}
+
+.brandMark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  color: var(--hw-text-inverse);
+  text-decoration: none;
+}
+
+.brandMark:hover {
+  color: var(--hw-text-inverse);
+}
+
+.brandName {
+  font-family: var(--hw-font-display);
+  font-size: 24px;
+  font-weight: 450;
+  letter-spacing: -0.015em;
+}
+
+.brandTag,
+.navGroupLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.brandStore {
+  font-size: 12px;
+}
+
+.adminNav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navGroupLabel {
+  margin: 12px 10px 4px;
+  color: var(--hw-text-inverse-muted);
+  opacity: 0.75;
+}
+
+.adminSection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+  padding: 0 10px;
+  border-radius: 10px;
+  color: var(--hw-text-inverse-muted);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.adminSection:hover {
+  background: rgba(250, 248, 244, 0.08);
+  color: var(--hw-text-inverse);
+}
+
+.adminSectionActive,
+.adminSectionActive:hover {
+  background: var(--hw-bg-page);
+  color: var(--hw-text-primary);
+  font-weight: 600;
+}
+
+.adminSectionIcon {
+  width: 18px;
+  display: inline-flex;
+  flex: none;
+}
+
+.adminSectionLabel {
+  flex: 1;
+  text-align: start;
+}
+
+.sidebarFoot {
+  margin-top: auto;
+  padding: 0 10px;
+}
+
+.sidebarFoot a {
+  font-size: 13px;
+  color: var(--hw-text-inverse-muted);
+}
+
+.sidebarFoot a:hover {
+  color: var(--hw-text-inverse);
+}
+
+/* ---------------- workspace ---------------- */
+
+.workspace {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  min-height: 56px;
+  padding: 8px 28px;
+  border-bottom: 1px solid var(--hw-border-default);
+  background: var(--hw-bg-surface);
+}
+
+.menuButton {
+  display: none;
+}
+
+.mobileBrand {
+  display: none;
+}
+
+.crumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--hw-text-subtle);
+  flex-wrap: wrap;
+}
+
+.crumbLink {
+  color: var(--hw-text-subtle);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.crumbLink:hover {
+  color: var(--hw-text-offer);
+}
+
+.crumbSep {
+  color: var(--hw-text-subtle);
+}
+
+.crumbCurrent {
+  color: var(--hw-text-primary);
+  font-weight: 600;
+}
+
+.adminIdentity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--hw-text-secondary);
+}
+
+.adminIdentityName {
+  color: var(--hw-text-primary);
+  font-weight: 600;
+}
+
+.adminIdentityRole {
+  opacity: 0.7;
+}
+
+.adminIdentityMfa {
+  padding: 2px 8px;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-bg-muted);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--hw-text-secondary);
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  padding: 24px 28px 48px;
+}
+
+/* Each admin screen's own column inside the shell's content slot. */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.demoNote {
+  margin: 0 28px 28px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--hw-text-muted);
+  border-top: 1px solid var(--hw-border-default);
+  padding-top: 14px;
+}
+
+.backdrop {
+  display: none;
+}
+
+/* Narrow board (Admin mobile 390): dark top bar, menu opens a drawer. */
+@media (max-width: 899px) {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sidebar {
+    position: fixed;
+    inset-block: 0;
+    inset-inline-start: 0;
+    z-index: 50;
+    width: min(300px, 86vw);
+    transform: translateX(-100%);
+    transition: transform var(--hw-motion-fast) var(--hw-easing);
+  }
+
+  [dir='rtl'] .sidebar {
+    transform: translateX(100%);
+  }
+
+  .sidebarOpen,
+  [dir='rtl'] .sidebarOpen {
+    transform: none;
+  }
+
+  .backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 49;
+    border: 0;
+    background: rgba(36, 40, 38, 0.4);
+  }
+
+  .topBar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 6px 12px;
+    background: var(--hw-text-primary);
+    border-bottom: 0;
+    color: var(--hw-text-inverse);
+  }
+
+  .menuButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+    color: var(--hw-text-inverse);
+    cursor: pointer;
+  }
+
+  .mobileBrand {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-inline-end: auto;
+    color: var(--hw-text-inverse);
+    text-decoration: none;
+  }
+
+  .mobileBrand:hover {
+    color: var(--hw-text-inverse);
+  }
+
+  .crumbs {
+    display: none;
+  }
+
+  .adminIdentity {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 6px 6px;
+    color: var(--hw-text-inverse-muted);
+  }
+
+  .adminIdentityName {
+    color: var(--hw-text-inverse);
+  }
+
+  .content {
+    padding: 18px 14px 40px;
+  }
+
+  .demoNote {
+    margin: 0 14px 24px;
+  }
+}
+
+/* Boards: page titles, intros, tabs and filters sit on the ivory canvas;
+   the tables and panels are the white cards. */
+.section {
+  margin: 0;
+  padding: 0;
+}
+
+.sectionTitle {
+  margin: 0 0 12px;
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: clamp(28px, 2.6vw, 34px);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+.sectionIntro {
+  margin: 0 0 20px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--hw-text-secondary);
+  max-width: 600px;
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--hw-radius-md);
+  border: 1.5px solid var(--hw-border-default);
+  background: var(--hw-bg-surface);
+  text-decoration: none;
+  color: inherit;
+}
+
+.statCard:hover {
+  border-color: var(--hw-action-primary);
+}
+
+.statIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--hw-bg-well);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.statBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.statLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+}
+
+.statValue {
+  font-size: 20px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--hw-text-primary);
+}
+
+.statSub {
+  font-size: 12px;
+  color: var(--hw-text-muted);
+}
+
+.stateGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+  gap: 14px;
+}
+
+.statePanel {
+  padding: 16px;
+  border-radius: var(--hw-radius-md);
+  border: 1.5px solid var(--hw-border-default);
+  background: var(--hw-bg-surface);
+}
+
+.statePanelTitle {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+}
+
+.statePanelList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stateRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.stateRowLabel {
+  color: var(--hw-text-secondary);
+}
+
+.stateRowCount {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--hw-border-default);
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+/* Underlined tabs, as on the Stage 5 boards. */
+.adminTab {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: inset 0 -2px 0 transparent;
+  color: var(--hw-text-secondary);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.adminTab:hover {
+  color: var(--hw-text-primary);
+}
+
+.adminTabActive,
+.adminTabActive:hover {
+  box-shadow: inset 0 -2px 0 var(--hw-text-primary);
+  color: var(--hw-text-primary);
+  font-weight: 600;
+}
+
+@media (max-width: 599px) {
+  .sectionTitle {
+    font-size: 28px;
+  }
+  .adminIdentity {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+  min-width: 0;
+}
+
+.fieldLabel {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.textField {
+  height: 40px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 12px;
+  border: 1.5px solid var(--hw-border-input);
+  border-radius: 8px;
+  background: var(--hw-bg-surface);
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--hw-text-primary);
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding: 48px 24px;
+  background: var(--hw-bg-surface);
+  border-radius: var(--hw-radius-overlay);
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+}
+
+.emptyIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--hw-bg-well);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.emptyTitle {
+  margin: 0;
+  font-family: var(--hw-font-display);
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.emptyBody {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--hw-text-secondary);
+  max-width: 420px;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  margin-bottom: 16px;
+  border-radius: var(--hw-radius-md);
+  background: var(--hw-bg-surface);
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.table th {
+  text-align: start;
+  white-space: nowrap;
+  padding: 10px 12px;
+  background: var(--hw-bg-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--hw-text-muted);
+  border-bottom: 1px solid var(--hw-border-card);
+}
+
+.table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--hw-border-card);
+  color: var(--hw-text-primary);
+}
+
+.tableRow:hover {
+  background: var(--hw-bg-muted);
+}
+
+/* Logical "end" alignment so numeric columns mirror correctly in RTL. */
+.textRight,
+.table .textRight {
+  text-align: end;
+}
+
+.table .textRight {
+  white-space: nowrap;
+}
+
+/* Keep reference numbers, dates and amounts on one line; the table scrolls. */
+.table .numerals,
+.table :global(.numerals),
+.table td > a {
+  white-space: nowrap;
+}
+
+.numerals {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.btnOutline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--hw-action-secondary);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btnOutline:hover {
+  box-shadow: inset 0 0 0 1.5px var(--hw-action-primary);
+  color: var(--hw-action-primary);
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-inline-start: 24px;
+  border-inline-start: 1px solid var(--hw-border-default);
+}
+
+.timelineRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.timelineDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--hw-action-secondary);
+  flex: none;
+  position: absolute;
+  inset-inline-start: -14px;
+  top: 4px;
+}
+
+/* ------------------------------------------------------------------
+ * F05 shared table / filter / bulk utilities. The Stage 5 boards use
+ * these across the admin screens; they were missing from this sheet.
+ * ------------------------------------------------------------------ */
+
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+  align-items: flex-end;
+}
+
+.filterChip {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 1 220px;
+  min-width: min(220px, 100%);
+}
+
+.bulkBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 10px 16px;
+  border-radius: var(--hw-radius-md);
+  background: var(--hw-bg-muted);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+  flex-wrap: wrap;
+}
+
+.tableCell {
+  text-align: start;
+  color: var(--hw-text-primary);
+}
+
+.table .tableCell.textRight {
+  text-align: end;
+}
+
+/* ------------------------------------------------------------------
+ * F05 product-edit form. Charts the "Edit product" board: image grid,
+ * name/SKU/type/price/status fields and the specification grid.
+ * ------------------------------------------------------------------ */
+
+.productFormWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  flex: 1;
+  min-width: 220px;
+}
+
+.imageTile {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--hw-radius-md);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px var(--hw-border-card);
+  background: var(--hw-bg-well);
+}
+
+.imageGridItem {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.dialogForm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.formColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.priceInputGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.currencyLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--hw-text-secondary);
+}
+
+.specsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+  gap: 12px;
+}
+
+.specRow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 16px;
+  border: 1.5px solid var(--hw-border-card);
+  border-radius: var(--hw-radius-md);
+  background: var(--hw-bg-muted);
+  font-size: 14px;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-action-primary);
+  color: var(--hw-text-on-dark);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btnPrimary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btnOutline:disabled,
+.btnOutline:disabled:hover {
+  box-shadow: inset 0 0 0 1.5px var(--hw-border-default);
+  color: var(--hw-text-muted);
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------
+ * Detail-screen helpers (order detail, edit product, inventory). These
+ * classes were referenced by the pages but never defined, so the
+ * elements rendered unstyled.
+ * ------------------------------------------------------------------ */
+
+.headRow,
+.statRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin-bottom: 8px;
+}
+
+.headRow .sectionTitle,
+.statRow .sectionTitle {
+  margin: 0;
+}
+
+.statRowTotal {
+  margin-inline-start: auto;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.subsectionTitle {
+  margin: 24px 0 10px;
+  font-family: var(--hw-font-display);
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 1.2;
+  color: var(--hw-text-primary);
+}
+
+.fieldHelp {
+  margin: 0 0 4px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--hw-text-secondary);
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 0 32px;
+}
+
+.lineItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 200px;
+}
+
+.lineItemImage {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--hw-radius-sm);
+  background: var(--hw-bg-well);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.demoAlert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border-radius: var(--hw-radius-md);
+  background: var(--hw-bg-muted);
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--hw-text-primary);
+}

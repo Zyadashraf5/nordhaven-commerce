@@ -1,0 +1,808 @@
+/* ------------------------------------------------------------------ *
+ * F04 — Orders & after-purchase shared styles.
+ * Warm Editorial design system: logical properties, ivory canvas,
+ * #FFFFFF cards with inset #E2DBCF ring, radius 16.
+ * ------------------------------------------------------------------ */
+
+.page {
+  flex: 1;
+  max-width: var(--hw-content-max);
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 22px var(--hw-gutter) 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.headRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px 32px;
+}
+
+.headTitles {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+
+.headline {
+  margin: 0;
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: clamp(40px, 4vw, 52px);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--hw-text-secondary);
+}
+
+.continueLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 15px;
+  color: var(--hw-text-primary);
+  text-decoration: none;
+}
+
+.demoNote {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--hw-text-muted);
+  border-top: 1px solid var(--hw-border-default);
+  padding-top: 14px;
+}
+
+/* Status pill */
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--hw-radius-pill);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.statusAvailable {
+  background: var(--hw-status-available-bg);
+  color: var(--hw-status-available);
+}
+
+.statusAttention {
+  background: var(--hw-status-attention-bg);
+  color: var(--hw-status-attention);
+}
+
+.statusError {
+  background: var(--hw-status-error-bg);
+  color: var(--hw-status-error);
+}
+
+.statusInfo {
+  background: var(--hw-status-info-bg);
+  color: var(--hw-status-info);
+}
+
+/* Section card */
+.section {
+  margin: 0;
+  padding: 22px 28px;
+  border-radius: var(--hw-radius-overlay);
+  background: var(--hw-bg-surface);
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+}
+
+/* Stage 4 boards: section headings at 30 px (26 px on the narrow boards). */
+.sectionTitle {
+  margin: 0 0 12px;
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.1;
+}
+
+@media (max-width: 899px) {
+  .sectionTitle {
+    font-size: 26px;
+  }
+}
+
+.sectionIntro {
+  margin: 0 0 20px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--hw-text-secondary);
+  max-width: 600px;
+}
+
+/* Field */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+  min-width: 0;
+}
+
+.fieldLabel {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.fieldLabelMuted {
+  font-weight: 400;
+  color: var(--hw-text-muted);
+}
+
+.textField {
+  height: 48px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 14px;
+  border: 1.5px solid var(--hw-border-input);
+  border-radius: 10px;
+  background: var(--hw-bg-surface);
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--hw-text-primary);
+}
+
+.textFieldInvalid {
+  border-color: var(--hw-status-error);
+}
+
+.fieldError {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--hw-status-error);
+}
+
+.fieldHelp {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--hw-text-subtle);
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: 16px;
+}
+
+/* Buttons */
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-action-primary);
+  color: var(--hw-text-on-dark);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter var(--hw-motion-fast) var(--hw-easing);
+}
+
+.btnPrimary:disabled {
+  background: var(--hw-bg-disabled);
+  color: var(--hw-text-muted);
+  cursor: not-allowed;
+}
+
+@media (hover: hover) {
+  .btnPrimary:not(:disabled):hover {
+    filter: brightness(0.9);
+  }
+}
+
+.btnOutline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--hw-action-secondary);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btnOutline:hover {
+  box-shadow: inset 0 0 0 1.5px var(--hw-action-primary);
+  color: var(--hw-action-primary);
+}
+
+.btnDanger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-status-error);
+  color: var(--hw-text-on-dark);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter var(--hw-motion-fast) var(--hw-easing);
+}
+
+.btnDanger:disabled {
+  background: var(--hw-bg-disabled);
+  color: var(--hw-text-muted);
+  cursor: not-allowed;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+/* Money amount */
+.amount {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+}
+
+/* Empty state */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding: 64px 24px;
+  background: var(--hw-bg-surface);
+  border-radius: var(--hw-radius-overlay);
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+}
+
+.emptyIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--hw-bg-well);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.emptyTitle {
+  font-family: var(--hw-font-display);
+  font-weight: 500;
+  font-size: 26px;
+}
+
+.emptyBody {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--hw-text-secondary);
+  max-width: 420px;
+}
+
+/* Error state */
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding: 40px 24px;
+}
+
+.errorTitle {
+  font-family: var(--hw-font-display);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--hw-text-primary);
+}
+
+.errorBody {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--hw-text-secondary);
+  max-width: 420px;
+}
+
+/* List */
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.numerals {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.arTheme {
+  font-family: var(--hw-font-arabic-ui);
+}
+
+.headlineAr {
+  font-family: var(--hw-font-arabic-display);
+}
+
+/* Card row */
+.cardRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border-radius: var(--hw-radius-md);
+  border: 1.5px solid var(--hw-border-default);
+  background: var(--hw-bg-surface);
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .cardRow:hover {
+    border-color: var(--hw-action-primary);
+  }
+}
+
+.cardRow.selected {
+  border-color: var(--hw-action-primary);
+  background: var(--hw-bg-well-cool);
+}
+
+.cardRadio {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--hw-action-secondary);
+  flex: none;
+}
+
+.cardBody {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cardLabel {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+}
+
+.cardLines {
+  font-size: 14px;
+  color: var(--hw-text-secondary);
+  line-height: 1.45;
+}
+
+.cardDefaultPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-status-available-bg);
+  color: var(--hw-status-available);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  flex: none;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--hw-border-default);
+  margin-bottom: 20px;
+  /* Five status tabs do not fit 390 px; scroll them instead of the page. */
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  display: inline-flex;
+  flex: none;
+  white-space: nowrap;
+  align-items: center;
+  /* The tabs are <button>s: drop the UA box so only the underline shows. */
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0 16px 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--hw-text-muted);
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+}
+
+.tab.active {
+  color: var(--hw-action-primary);
+  border-bottom-color: var(--hw-action-primary);
+}
+
+.tabActive {
+  color: var(--hw-action-primary);
+  border-bottom-color: var(--hw-action-primary);
+}
+
+.tabCount {
+  margin-inline-start: 6px;
+  font-weight: 500;
+  color: var(--hw-text-subtle);
+}
+
+/* Timeline */
+.timeline {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.timelineStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 110px;
+}
+
+.stepDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--hw-border-default);
+  flex: none;
+}
+
+.stepDot.done {
+  background: var(--hw-status-available);
+}
+
+.stepDot.active {
+  background: var(--hw-action-primary);
+}
+
+.stepLabel {
+  font-size: 13px;
+  text-align: center;
+  color: var(--hw-text-secondary);
+}
+
+.stepLabel.done {
+  color: var(--hw-text-primary);
+  font-weight: 600;
+}
+
+.stepDate {
+  font-size: 12px;
+  text-align: center;
+  color: var(--hw-text-muted);
+}
+
+/* Result card */
+.resultCard {
+  background: var(--hw-bg-surface);
+  border-radius: var(--hw-radius-overlay);
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 560px;
+}
+
+.resultIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--hw-bg-well-cool);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.resultTitle {
+  margin: 0;
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: clamp(30px, 3vw, 40px);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
+
+.resultBody {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--hw-text-secondary);
+}
+
+/* Spinner */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--hw-border-default);
+  border-top-color: var(--hw-action-primary);
+  border-radius: 50%;
+  animation: hwSpin 0.9s linear infinite;
+  flex: none;
+}
+
+@keyframes hwSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.demoAlert {
+  display: flex;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: var(--hw-radius-md);
+  background: var(--hw-status-attention-bg);
+  color: #5e3e08;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.cardImage {
+  position: relative;
+  width: 56px;
+  height: 70px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--hw-bg-well);
+  flex: none;
+}
+
+.summaryList {
+  margin: 0;
+  padding: 0;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--hw-z-overlay);
+  background: var(--hw-bg-scrim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.dialog {
+  width: 100%;
+  max-width: 560px;
+  background: var(--hw-bg-page);
+  border-radius: var(--hw-radius-overlay);
+  box-shadow: var(--hw-shadow-sheet);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dialogTitle {
+  margin: 0;
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.15;
+}
+
+.confirmBox {
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.confirmBoxLabel {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--hw-text-secondary);
+}
+
+.dialogFooter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Narrow layout: AccountLayout shows the back link above the title instead. */
+@media (max-width: 899px) {
+  .headRow > .continueLink {
+    display: none;
+  }
+}
+
+/* Order cards (Stage 4 orders boards): number, date and status on top, then
+   up to two item thumbnails, the first item name, count, total and actions. */
+.orderCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: var(--hw-radius-md);
+  background: var(--hw-bg-surface);
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+}
+
+.orderCardHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+
+.orderCardNo {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.orderCardDate {
+  font-size: 13px;
+  color: var(--hw-text-subtle);
+}
+
+.orderCardBadge {
+  margin-inline-start: auto;
+}
+
+.orderCardBody {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.orderCardThumbs {
+  display: flex;
+  gap: 6px;
+  flex: none;
+}
+
+.orderCardThumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: var(--hw-radius-sm);
+  background: var(--hw-bg-well);
+}
+
+.orderCardText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.orderCardName {
+  font-size: 14px;
+  color: var(--hw-text-primary);
+}
+
+.orderCardMeta {
+  font-size: 13px;
+  color: var(--hw-text-secondary);
+}
+
+@media (max-width: 599px) {
+  .orderCardBody {
+    flex-wrap: wrap;
+  }
+
+  .orderCardBody > .btnOutline {
+    width: 100%;
+  }
+}
+
+/* Orders filter pills (Stage 4 orders boards). */
+.pillTabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.pillTabs::-webkit-scrollbar {
+  display: none;
+}
+
+.pillTab {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-bg-surface);
+  box-shadow: inset 0 0 0 1px var(--hw-border-strong);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.pillTabActive {
+  background: var(--hw-text-primary);
+  box-shadow: none;
+  color: var(--hw-text-on-dark);
+}
+
+.pillCount {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-bg-muted);
+  color: var(--hw-text-secondary);
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.pillTabActive .pillCount {
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--hw-text-on-dark);
+}

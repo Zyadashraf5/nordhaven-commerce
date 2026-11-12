@@ -1,0 +1,134 @@
+.footer {
+  flex: 1;
+  background: var(--hw-text-primary);
+  color: var(--hw-text-inverse);
+}
+
+.inner {
+  width: 100%;
+  max-width: calc(var(--hw-content-max) + 2 * var(--hw-gutter));
+  margin-inline: auto;
+  padding: 64px var(--hw-gutter) 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+  gap: 32px;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.brandName {
+  font-family: var(--hw-font-display);
+  font-size: 28px;
+}
+
+.tagline {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--hw-text-inverse-muted);
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.columnTitle {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--hw-text-inverse-muted);
+}
+
+.link {
+  color: var(--hw-text-inverse);
+  text-decoration: none;
+}
+
+.link:hover {
+  color: var(--hw-text-inverse);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--hw-border-on-dark);
+  padding-top: 20px;
+  font-size: 13px;
+  color: var(--hw-text-inverse-muted);
+}
+
+.mobileInner {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .inner {
+    display: none;
+  }
+
+  .mobileInner {
+    display: flex;
+    flex-direction: column;
+    padding: 28px 14px;
+  }
+
+  .mobileBrandName {
+    font-family: var(--hw-font-display);
+    font-size: 26px;
+    padding-bottom: 14px;
+  }
+
+  .mobileDetails {
+    border-top: 1px solid var(--hw-border-on-dark);
+  }
+
+  .mobileDetails:last-of-type {
+    border-bottom: 1px solid var(--hw-border-on-dark);
+  }
+
+  .mobileDetails summary {
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .mobileColumnLinks {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 12px;
+  }
+
+  .mobileColumnLinks a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    color: var(--hw-text-inverse);
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .mobileCopyright {
+    font-size: 12px;
+    color: var(--hw-text-inverse-muted);
+    padding-top: 16px;
+  }
+}

@@ -1,0 +1,265 @@
+/* Order confirmation — Stage 3 "Order confirmation, mobile 390" board. */
+
+.page {
+  flex: 1;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px var(--hw-gutter) 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.doneMark {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--hw-status-available-bg);
+  color: var(--hw-status-available);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.headline {
+  margin: -8px 0 0;
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: clamp(34px, 4vw, 44px);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+}
+
+.intro {
+  margin: -8px 0 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--hw-text-secondary);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 20px;
+  border-radius: var(--hw-radius-overlay);
+  background: var(--hw-bg-surface);
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+}
+
+.label,
+.details dt {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hw-text-muted);
+}
+
+.orderRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.orderNo {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.meta {
+  font-size: 13px;
+  color: var(--hw-text-subtle);
+}
+
+.meta strong {
+  color: var(--hw-text-primary);
+}
+
+.next {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sectionTitle,
+.cardTitle {
+  margin: 0;
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: 26px;
+}
+
+.cardTitle {
+  font-size: 22px;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.stepNum {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.step_done {
+  background: var(--hw-status-available);
+  color: var(--hw-text-on-dark);
+}
+
+.step_next {
+  background: var(--hw-text-primary);
+  color: var(--hw-text-on-dark);
+}
+
+.step_later {
+  box-shadow: inset 0 0 0 1.5px var(--hw-border-strong);
+  color: var(--hw-text-secondary);
+}
+
+.stepText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--hw-text-secondary);
+}
+
+.stepText strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--hw-text-primary);
+}
+
+.note {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--hw-text-subtle);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btnPrimary,
+.btnOutline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  padding: 0 28px;
+  border-radius: var(--hw-radius-pill);
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.btnPrimary {
+  background: var(--hw-action-primary);
+  color: var(--hw-text-on-dark);
+}
+
+.btnPrimary:hover {
+  color: var(--hw-text-on-dark);
+  filter: brightness(0.92);
+}
+
+.btnOutline {
+  box-shadow: inset 0 0 0 1.5px var(--hw-text-primary);
+  color: var(--hw-text-primary);
+}
+
+.details {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.details dd {
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+}
+
+.totals {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--hw-text-secondary);
+}
+
+.totals > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.totals dd {
+  margin: 0;
+  color: var(--hw-text-primary);
+}
+
+.saving,
+.saving dd {
+  color: var(--hw-text-offer);
+}
+
+.grand {
+  padding-top: 10px;
+  border-top: 1px solid var(--hw-border-default);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--hw-text-primary);
+}
+
+.demoNote {
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--hw-border-default);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--hw-text-muted);
+}
+
+/* Narrow board: full-width stacked actions. */
+@media (max-width: 599px) {
+  .page {
+    padding: 24px 14px 56px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .btnPrimary,
+  .btnOutline {
+    width: 100%;
+  }
+}

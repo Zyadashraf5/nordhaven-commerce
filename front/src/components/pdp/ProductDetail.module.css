@@ -1,0 +1,1370 @@
+/* ------------------------------------------------------------------ *
+ * Product detail page — board-07 (desktop) and board-08 (narrow).
+ * The two layouts share one stylesheet with logical properties so the
+ * Arabic board (09) is the same sheet mirrored.
+ * ------------------------------------------------------------------ */
+
+.topArea {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.topColumns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+  align-items: flex-start;
+}
+
+/* ---------------- gallery ---------------- */
+
+.gallery {
+  flex: 999 1 560px;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 16px;
+}
+
+.thumbRail {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.thumb {
+  width: 84px;
+  aspect-ratio: 4 / 5;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--hw-bg-well);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.thumbSelected {
+  box-shadow:
+    var(--hw-bg-page) 0 0 0 2px,
+    var(--hw-text-primary) 0 0 0 4px;
+}
+
+.stage {
+  margin: 0;
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--hw-bg-well);
+}
+
+.stage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.galleryBadge {
+  position: absolute;
+  top: 16px;
+  inset-inline-start: 16px;
+  padding: 6px 12px;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-text-offer);
+  color: var(--hw-text-on-dark);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.galleryHeart {
+  position: absolute;
+  top: 6px;
+  inset-inline-end: 8px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(250, 248, 244, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.galleryControls {
+  position: absolute;
+  bottom: 16px;
+  inset-inline-end: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.galleryCounter {
+  padding: 6px 12px;
+  border-radius: var(--hw-radius-pill);
+  background: rgba(250, 248, 244, 0.92);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.galleryNav {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(250, 248, 244, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Mobile: the stage carries its own side arrows and dots, and the thumbs
+   become a horizontal scroller below the stage. */
+
+.galleryDots {
+  position: absolute;
+  bottom: 12px;
+  inset-inline: 0;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.galleryDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(36, 40, 38, 0.25);
+}
+
+.galleryDotActive {
+  background: var(--hw-text-primary);
+}
+
+.gallerySideNav {
+  position: absolute;
+  top: 50%;
+  margin-top: -22px;
+  inset-inline-start: 6px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(250, 248, 244, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.gallerySideNavEnd {
+  inset-inline-start: auto;
+  inset-inline-end: 6px;
+}
+
+.thumbStrip {
+  display: none;
+}
+
+/* ---------------- details column ---------------- */
+
+.details {
+  flex: 1 1 400px;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  position: sticky;
+  top: 24px;
+}
+
+.detailsHead {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.brandLink {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hw-text-muted);
+  text-decoration: none;
+}
+
+.headline {
+  margin: 0;
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: clamp(30px, 3.4vw, 42px);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+}
+
+.summary {
+  font-size: 15px;
+  color: var(--hw-text-secondary);
+  line-height: 1.55;
+}
+
+/* ---------------- price block ---------------- */
+
+.priceBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--hw-border-default);
+}
+
+.priceRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.price {
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+}
+
+.priceOffer {
+  color: var(--hw-text-offer);
+}
+
+.priceMuted {
+  color: var(--hw-text-muted);
+}
+
+.was {
+  font-size: 17px;
+  color: var(--hw-text-muted);
+}
+
+.savePill {
+  padding: 4px 10px;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-bg-muted);
+  color: var(--hw-text-offer);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.priceNote {
+  font-size: 13px;
+  color: var(--hw-text-subtle);
+}
+
+/* The narrow board shortens the note to "Checked again at checkout." */
+.priceNoteShort {
+  display: none;
+}
+
+/* ---------------- variant pickers ---------------- */
+
+.pickBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pickLegendRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 10px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.pickLegendValue {
+  font-weight: 500;
+}
+
+.dimensionsLink {
+  font-size: 14px;
+  font-weight: 500;
+  text-underline-offset: 4px;
+}
+
+.swatchGroup {
+  display: flex;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.swatch {
+  width: 48px;
+  height: 48px;
+  border: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.swatchDot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(36, 40, 38, 0.18);
+}
+
+.swatchSelected {
+  box-shadow: inset 0 0 0 2px var(--hw-text-primary);
+}
+
+.swatchStrike {
+  position: absolute;
+  width: 40px;
+  height: 1.5px;
+  background: var(--hw-text-muted);
+  transform: rotate(-45deg);
+}
+
+[dir='rtl'] .swatchStrike {
+  transform: rotate(45deg);
+}
+
+.sizeGroup {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.sizeTile {
+  min-height: 68px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: var(--hw-bg-surface);
+  font-family: inherit;
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  border: 1px solid var(--hw-border-input);
+  box-sizing: border-box;
+}
+
+.sizeTileSelected {
+  border: 2px solid var(--hw-text-primary);
+}
+
+.sizeTileLabel {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.sizeTilePrice {
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  color: var(--hw-text-secondary);
+}
+
+/* ---------------- availability + buy row ---------------- */
+
+.statusBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.statusText {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--hw-status-available);
+}
+
+.statusTextMuted {
+  color: var(--hw-text-muted);
+}
+
+.statusTextInfo {
+  color: var(--hw-status-info);
+}
+
+.skuLine {
+  font-size: 13px;
+  color: var(--hw-text-subtle);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.unavailableHint {
+  font-size: 13px;
+  color: var(--hw-text-subtle);
+}
+
+.buyRow {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.quantity {
+  display: inline-flex;
+  align-items: center;
+  width: 132px;
+  height: 56px;
+  border-radius: var(--hw-radius-pill);
+  box-shadow: 0 0 0 1.5px var(--hw-border-input) inset;
+  justify-content: space-between;
+  background: var(--hw-bg-surface);
+  flex: 0 0 auto;
+}
+
+.quantityBtn {
+  width: 48px;
+  height: 48px;
+  border: 0;
+  background: transparent;
+  font-size: 22px;
+  color: var(--hw-text-primary);
+  cursor: pointer;
+}
+
+.quantityBtn[disabled] {
+  color: var(--hw-border-input);
+  cursor: default;
+}
+
+.quantityValue {
+  font-size: 17px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.addToCart {
+  flex: 1 1 0%;
+  height: 56px;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-action-primary);
+  color: var(--hw-text-on-dark);
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.addToCart:hover:enabled {
+  background: var(--hw-action-primary-hover);
+}
+
+.addToCart[disabled] {
+  background: var(--hw-bg-disabled);
+  color: var(--hw-text-muted);
+  cursor: not-allowed;
+  font-size: 15px;
+}
+
+.preOrderButton {
+  flex: 1 1 0%;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  box-shadow: inset 0 0 0 1.5px var(--hw-status-info);
+  color: var(--hw-status-info);
+  background: transparent;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.wishlistBig {
+  width: 56px;
+  height: 56px;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 50%;
+  background: var(--hw-bg-surface);
+  box-shadow: inset 0 0 0 1.5px var(--hw-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* ---------------- info panel + set card ---------------- */
+
+.infoPanel {
+  margin: 0;
+  padding: 16px 18px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--hw-bg-muted);
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--hw-text-secondary);
+}
+
+.infoPanel li {
+  display: flex;
+  gap: 12px;
+}
+
+.infoPanel svg {
+  flex: 0 0 auto;
+  color: var(--hw-text-offer);
+}
+
+.setCard {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--hw-bg-surface);
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+  text-decoration: none;
+}
+
+.setCardImage {
+  width: 88px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.setCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.setCardEyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hw-text-offer);
+}
+
+.setCardName {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+}
+
+.setCardLine {
+  font-size: 13px;
+  color: var(--hw-text-subtle);
+  font-variant-numeric: tabular-nums lining-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------------- shared section styles ---------------- */
+
+.section {
+  padding-top: 48px;
+  border-top: 1px solid var(--hw-border-strong);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: clamp(26px, 3vw, 36px);
+}
+
+.specsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr));
+  gap: 48px 64px;
+  padding-top: 48px;
+}
+
+.specsCol {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.aboutBody {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--hw-text-secondary);
+  max-width: 640px;
+}
+
+.aboutImage {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.accordion {
+  display: flex;
+  flex-direction: column;
+}
+
+.accordionItem {
+  border-bottom: 1px solid var(--hw-border-default);
+  border-top: 1px solid var(--hw-text-primary);
+}
+
+/* The About/Specifications blocks render as copy with an h2 on the wide
+   layout; their summary row (and its rules) only exist on the narrow one. */
+.accordionLead {
+  border-top: 0;
+  border-bottom: 0;
+}
+
+.accordionLead > .accordionSummary {
+  display: none;
+}
+
+.accordionSummary {
+  list-style: none;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.accordionLabel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.accordionSummary::-webkit-details-marker {
+  display: none;
+}
+
+.accordionChevron {
+  transition: transform var(--hw-motion-fast) var(--hw-easing);
+}
+
+.accordionItem[open] > .accordionSummary .accordionChevron {
+  transform: rotate(180deg);
+}
+
+.accordionBody {
+  margin: 0 0 18px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--hw-text-secondary);
+}
+
+.accordionBullets {
+  margin: 0 0 18px;
+  padding-inline-start: 18px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--hw-text-secondary);
+}
+
+.specTable {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  border-top: 1px solid var(--hw-text-primary);
+  font-size: 15px;
+}
+
+.specTerm {
+  padding: 13px 0;
+  border-bottom: 1px solid var(--hw-border-default);
+  color: var(--hw-text-subtle);
+}
+
+.specDetail {
+  margin: 0;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--hw-border-default);
+}
+
+.specDetailStrong {
+  font-weight: 600;
+}
+
+/* The definition rows are wrapped for valid <dl> markup; contents lets the
+   dt/dd pair take part in the table grid directly. */
+.specRow {
+  display: contents;
+}
+
+.dimensions {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 24px;
+  background: var(--hw-bg-surface);
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+}
+
+.dimensionsSvg {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+}
+
+.dimensionsCaption {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Reviews */
+
+.reviewsGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 48px;
+  padding-top: 48px;
+}
+
+.reviewsIntro {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reviewsBody {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--hw-text-secondary);
+}
+
+.reviewsCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 32px;
+  background: var(--hw-bg-surface);
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+}
+
+.reviewsTitle {
+  font-family: var(--hw-font-display);
+  font-weight: 500;
+  font-size: 24px;
+}
+
+.reviewsLink {
+  display: inline-flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 22px;
+  border-radius: var(--hw-radius-pill);
+  box-shadow: inset 0 0 0 1.5px var(--hw-text-primary);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+}
+
+/* Goes well with */
+
+.goowellHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.goowellLink {
+  font-size: 15px;
+  font-weight: 600;
+  text-underline-offset: 4px;
+}
+
+.goowellGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 20px;
+}
+
+.goowellCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.goowellImage {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.goowellName {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--hw-text-primary);
+}
+
+.goowellPrice {
+  font-size: 16px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--hw-text-primary);
+}
+
+.goowellPriceOffer {
+  color: var(--hw-text-offer);
+}
+
+.goowellWas {
+  font-size: 13px;
+  color: var(--hw-text-muted);
+  font-weight: 400;
+}
+
+/* Mobile sticky buy bar (board-08) */
+
+.stickyBar {
+  position: sticky;
+  bottom: 0;
+  z-index: var(--hw-z-sticky);
+  margin-top: auto;
+  padding: 10px 14px 12px;
+  background: rgba(250, 248, 244, 0.97);
+  /* Blur what scrolls beneath so the 3% translucency never ghosts headings. */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    var(--hw-border-default) 0 -1px 0,
+    rgba(36, 40, 38, 0.08) 0 -8px 24px;
+}
+
+.stickyBarInner {
+  max-width: var(--hw-content-max);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 170px;
+  gap: 10px;
+  align-items: center;
+}
+
+.stickyBarSelection {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.stickyBarLine {
+  font-size: 12px;
+  color: var(--hw-text-subtle);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.stickyBarPrice {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--hw-text-offer);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.stickyBarPriceMuted {
+  color: var(--hw-text-muted);
+}
+
+.stickyBarAdd {
+  height: 52px;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-action-primary);
+  color: var(--hw-text-on-dark);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stickyBarAdd[disabled] {
+  background: var(--hw-bg-disabled);
+  color: var(--hw-text-muted);
+  cursor: not-allowed;
+}
+
+/* ---------------- page frame ---------------- */
+
+.page {
+  width: 100%;
+  max-width: var(--hw-content-max);
+  margin-inline: auto;
+  padding: 20px var(--hw-gutter) 88px;
+  display: flex;
+  flex-direction: column;
+  gap: 72px;
+  box-sizing: border-box;
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--hw-text-subtle);
+}
+
+.crumbsLink {
+  color: var(--hw-text-subtle);
+  text-decoration: none;
+}
+
+.crumbsLink:hover {
+  color: var(--hw-text-primary);
+  text-decoration: underline;
+}
+
+.crumbsCurrent {
+  color: var(--hw-text-primary);
+  font-weight: 600;
+}
+
+.backLink {
+  align-self: flex-start;
+  display: none;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--hw-text-primary);
+}
+
+/* ---------------- the narrow switch ---------------- */
+
+.desktopControls {
+  display: revert;
+}
+
+.mobileControls {
+  display: none !important;
+}
+
+@media (max-width: 1023px) {
+  .page {
+    padding: 0 0 0;
+    gap: 0;
+  }
+
+  .topArea {
+    padding-top: 0;
+  }
+
+  .topColumns {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .gallery {
+    flex: none;
+    /* The column flex parent aligns to flex-start, so stretch explicitly. */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+  }
+
+  .thumbRail {
+    display: none;
+  }
+
+  .desktopControls {
+    display: none !important;
+  }
+
+  .mobileControls {
+    display: revert !important;
+  }
+
+  .stage {
+    border-radius: 0;
+  }
+
+  .galleryBadge {
+    top: 12px;
+    inset-inline-start: 14px;
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .galleryCounter {
+    display: none;
+  }
+
+  .galleryControls {
+    display: none;
+  }
+
+  .galleryHeart {
+    top: 6px;
+    inset-inline-end: 8px;
+  }
+
+  .thumbStrip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 2px 14px 6px;
+    scrollbar-width: none;
+  }
+
+  .thumbStrip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .thumbStrip .thumb {
+    flex: 0 0 auto;
+    width: 56px;
+  }
+
+  .details {
+    position: static;
+    width: 100%;
+    max-width: none;
+    padding: 18px 14px 0;
+    gap: 18px;
+  }
+
+  .detailsHead {
+    gap: 6px;
+  }
+
+  .headline {
+    font-size: 30px;
+  }
+
+  .priceBlock {
+    padding-bottom: 0;
+    border-bottom: 0;
+    gap: 2px;
+  }
+
+  .price {
+    font-size: 26px;
+  }
+
+  .was {
+    font-size: 15px;
+  }
+
+  .savePill {
+    padding: 3px 9px;
+    font-size: 12px;
+  }
+
+  .statusText,
+  .statusTextMuted,
+  .statusTextInfo {
+    font-size: 14px;
+  }
+
+  .skuLine {
+    font-size: 12px;
+  }
+
+  .buyRow {
+    display: grid;
+    grid-template-columns: 124px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .quantity {
+    width: auto;
+    height: 52px;
+  }
+
+  .quantityBtn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .quantityValue {
+    font-size: 15px;
+  }
+
+  .addToCart,
+  .preOrderButton {
+    height: 52px;
+    font-size: 16px;
+  }
+
+  .wishlistBig {
+    display: none;
+  }
+
+  .infoPanel {
+    padding: 14px;
+    gap: 10px;
+    font-size: 13px;
+  }
+
+  .infoPanel svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .setCard {
+    grid-template-columns: 72px minmax(0, 1fr) auto;
+    gap: 12px;
+    padding: 10px;
+  }
+
+  .setCardImage {
+    width: 72px;
+  }
+
+  .setCardEyebrow {
+    font-size: 10px;
+  }
+
+  .setCardName {
+    font-size: 14px;
+  }
+
+  .setCardLine {
+    font-size: 12px;
+  }
+
+  /* Sections stack with the accordion treatment and a 56px title row. */
+  .section,
+  .reviewsGrid,
+  .specsGrid {
+    padding-top: 28px;
+    padding-inline: 14px;
+    gap: 10px;
+  }
+
+  .specsGrid .sectionTitle {
+    display: none;
+  }
+
+  .accordionLead {
+    border-top: 1px solid var(--hw-text-primary);
+    border-bottom: 1px solid var(--hw-border-default);
+  }
+
+  .accordionLead > .accordionSummary {
+    display: flex;
+  }
+
+  .sectionTitle {
+    font-size: 26px;
+  }
+
+  .specsGrid,
+  .reviewsGrid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .aboutBody {
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+
+  .aboutImage {
+    display: none;
+  }
+
+  .accordion {
+    border-top: none;
+  }
+
+  .accordionItem {
+    border-top: 1px solid var(--hw-text-primary);
+    border-bottom: 1px solid var(--hw-border-default);
+  }
+
+  .accordionItem + .accordionItem {
+    border-top: 0;
+  }
+
+  .accordionSummary {
+    min-height: 56px;
+    font-size: 16px;
+  }
+  .specTable {
+    grid-template-columns: 130px minmax(0, 1fr);
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+
+  .specTerm,
+  .specDetail {
+    padding: 9px 0;
+    border-bottom-color: #ede9df;
+  }
+
+  .dimensions {
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .reviewsIntro {
+    display: none;
+  }
+
+  .reviewsCard {
+    padding: 18px;
+    gap: 10px;
+  }
+
+  .reviewsTitle {
+    font-size: 16px;
+    font-family: inherit;
+    font-weight: 600;
+  }
+
+  .reviewsBody {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .reviewsLink {
+    display: none;
+  }
+
+  .goowellGrid {
+    /* The approved narrow scroller: fixed 150px cards. */
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding-inline: 14px;
+    scrollbar-width: none;
+  }
+
+  .goowellGrid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .goowellCard {
+    flex: 0 0 auto;
+    width: 150px;
+    gap: 6px;
+  }
+
+  .goowellName {
+    font-size: 13px;
+  }
+
+  .goowellPrice {
+    font-size: 14px;
+  }
+
+  .goowellWas {
+    font-size: 12px;
+  }
+
+  /* Price block note shortens, per board-08. */
+  .priceNoteWide {
+    display: none;
+  }
+}
+
+/* On the narrow layout the sections get additional top rhythm; the board
+   shows 32px before Reviews and Goes well with. */
+
+@media (max-width: 1023px) {
+  .priceNoteWide {
+    display: none;
+  }
+
+  .priceNoteShort {
+    display: revert;
+  }
+
+  .crumbs {
+    display: none;
+  }
+
+  .backLink {
+    display: inline-flex;
+    margin-inline: 0;
+  }
+}
+
+/* Narrow-layout type sizes from the PDP mobile board (board-08). */
+@media (max-width: 1023px) {
+  .brandLink {
+    font-size: 12px;
+  }
+
+  .sizeTileLabel {
+    font-size: 15px;
+  }
+
+  .sizeTilePrice {
+    font-size: 13px;
+  }
+
+  .reviewsTitle {
+    font-weight: 700;
+  }
+}

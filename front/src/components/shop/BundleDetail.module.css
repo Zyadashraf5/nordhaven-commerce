@@ -1,0 +1,740 @@
+/* ------------------------------------------------------------------ *
+ * Bundle detail page — board-10 (fixed, desktop), board-11 (fixed, narrow),
+ * board-12 (dynamic, desktop) and board-13 (dynamic, narrow). One stylesheet
+ * with logical properties; the two kinds share the frame and differ in the
+ * contents presentation.
+ * ------------------------------------------------------------------ */
+
+.page {
+  width: 100%;
+  max-width: var(--hw-content-max);
+  margin-inline: auto;
+  padding: 20px var(--hw-gutter) 88px;
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  box-sizing: border-box;
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--hw-text-subtle);
+}
+
+.crumbsLink {
+  color: var(--hw-text-subtle);
+  text-decoration: none;
+}
+
+.crumbsLink:hover {
+  color: var(--hw-text-primary);
+  text-decoration: underline;
+}
+
+.crumbsCurrent {
+  color: var(--hw-text-primary);
+  font-weight: 600;
+}
+
+.topColumns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+  align-items: flex-start;
+}
+
+/* ---------------- image column ---------------- */
+
+.gallery {
+  flex: 999 1 560px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stage {
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--hw-bg-well);
+  position: relative;
+}
+
+.stage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.thumbRow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.thumb {
+  aspect-ratio: 4 / 3;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--hw-bg-well);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  box-sizing: border-box;
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+}
+
+.thumbSelected {
+  box-shadow:
+    var(--hw-bg-page) 0 0 0 2px,
+    var(--hw-text-primary) 0 0 0 4px;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------------- buy column ---------------- */
+
+.details {
+  flex: 1 1 400px;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 24px;
+}
+
+.badge {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: var(--hw-radius-pill);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.badgeFixed {
+  background: var(--hw-bg-luxury);
+  color: var(--hw-text-offer);
+}
+
+.badgeDynamic {
+  background: var(--hw-status-available-bg);
+  color: var(--hw-status-available);
+}
+
+.detailsHead {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.headline {
+  margin: 0;
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: clamp(32px, 3.6vw, 44px);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+}
+
+.description {
+  font-size: 16px;
+  color: var(--hw-text-secondary);
+  line-height: 1.55;
+}
+
+.priceBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--hw-border-default);
+}
+
+.price {
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.bdiWrap {
+  display: block;
+}
+
+.priceNote {
+  font-size: 13px;
+  color: var(--hw-text-subtle);
+}
+
+.statusBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.statusText {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--hw-status-available);
+}
+
+.statusTextMuted {
+  color: var(--hw-text-muted);
+}
+
+.skuLine {
+  font-size: 13px;
+  color: var(--hw-text-subtle);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Dynamic set: the component rows inside the buy column (board-12). */
+
+.inThisSet {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-bottom: 1px solid var(--hw-border-default);
+  padding-bottom: 16px;
+}
+
+.inThisSetTitle {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--hw-text-muted);
+}
+
+.inThisSetRows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.inThisSetRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.inThisSetImage {
+  width: 48px;
+  /* Override the intrinsic height attribute so the ratio applies. */
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+  flex: 0 0 auto;
+}
+
+.inThisSetBody {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 0%;
+}
+
+.inThisSetName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.inThisSetLine {
+  font-size: 12px;
+  color: var(--hw-text-subtle);
+}
+
+.inThisSetStatus {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--hw-status-available);
+  flex: 0 0 auto;
+}
+
+.inThisSetStatusOut {
+  color: var(--hw-status-error);
+}
+
+/* Quantity + add row. The Add-set action stays disabled in this milestone:
+   the bundles contract (cart endpoints and set inventory) is not connected. */
+
+.buyRow {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.quantity {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 132px;
+  height: 56px;
+  border-radius: var(--hw-radius-pill);
+  box-shadow: 0 0 0 1.5px var(--hw-border-input) inset;
+  background: var(--hw-bg-surface);
+  flex: 0 0 auto;
+}
+
+.quantityBtn {
+  width: 48px;
+  height: 48px;
+  border: 0;
+  background: transparent;
+  font-size: 22px;
+  color: var(--hw-text-primary);
+  cursor: pointer;
+}
+
+.quantityBtn[disabled] {
+  color: var(--hw-border-input);
+  cursor: default;
+}
+
+.quantityValue {
+  font-size: 17px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.addSet {
+  flex: 1 1 0%;
+  height: 56px;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-action-primary);
+  color: var(--hw-text-on-dark);
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: not-allowed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  opacity: 0.62;
+}
+
+.demoTailnote {
+  font-size: 13px;
+  color: var(--hw-text-subtle);
+}
+
+.buyStack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* "How a ready-packed set works" panel */
+
+.howPanel {
+  margin: 0;
+  padding: 18px;
+  background: var(--hw-bg-muted);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.howTitle {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.howList {
+  margin: 0;
+  /* The base stylesheet removes list bullets; the boards show them here. */
+  list-style: disc;
+  padding-inline-start: 18px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--hw-text-secondary);
+}
+
+/* ---------------- contents + details section ---------------- */
+
+.section {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 40px 56px;
+  padding-top: 48px;
+  border-top: 1px solid var(--hw-border-strong);
+}
+
+.sectionTitle {
+  margin: 0 0 20px;
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: clamp(26px, 3vw, 36px);
+}
+
+.componentRows {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 0;
+  border-top: 1px solid var(--hw-border-default);
+}
+
+.componentRows:last-child {
+  border-bottom: 1px solid var(--hw-border-default);
+}
+
+.componentImage {
+  width: 96px;
+  /* Override the intrinsic height attribute so the ratio applies. */
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.componentBody {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.componentName {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+}
+
+.componentLine {
+  font-size: 14px;
+  color: var(--hw-text-secondary);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.separately {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+  text-underline-offset: 4px;
+}
+
+.separately:hover {
+  color: var(--hw-action-primary);
+}
+
+.componentQty {
+  font-size: 15px;
+  color: var(--hw-text-subtle);
+  font-variant-numeric: tabular-nums lining-nums;
+  font-weight: 600;
+}
+
+/* Dynamic kind: "Items in this set" standalone grid (board-12). */
+
+.itemsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 20px;
+}
+
+.itemCard {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 10px;
+  background: var(--hw-bg-surface);
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+  text-decoration: none;
+}
+
+.itemCardImage {
+  width: 72px;
+  /* Override the intrinsic height attribute so the ratio applies. */
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+  flex: 0 0 auto;
+}
+
+.itemCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.itemCardName {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--hw-text-primary);
+}
+
+.itemCardLine {
+  font-size: 13px;
+  color: var(--hw-text-subtle);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Set details dl */
+
+.subTitle {
+  margin: 0 0 12px;
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: clamp(20px, 1.8vw, 28px);
+  letter-spacing: -0.01em;
+}
+
+.detailsCol {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.detailsList {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.detailsRow {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 16px;
+  padding: 13px 0;
+  border-top: 1px solid var(--hw-border-default);
+}
+
+.detailsRow:first-child {
+  border-top: 1px solid var(--hw-text-primary);
+}
+
+.detailsTerm {
+  font-size: 15px;
+  color: var(--hw-text-subtle);
+}
+
+.detailsDefinition {
+  margin: 0;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Reviews */
+
+.reviewsCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reviewsTitle {
+  font-family: var(--hw-font-display);
+  font-weight: 500;
+  font-size: 22px;
+}
+
+.reviewsBody {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--hw-text-secondary);
+}
+
+/* ---------------- narrow switch (boards 11/13) ---------------- */
+
+@media (max-width: 1023px) {
+  .page {
+    padding: 0 0 88px;
+    gap: 0;
+  }
+
+  .crumbs {
+    margin: 0 14px;
+  }
+
+  .topColumns {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .gallery {
+    flex: none;
+  }
+
+  .stage {
+    border-radius: 0;
+  }
+
+  .thumbRow {
+    gap: 8px;
+    padding: 8px 14px 0;
+  }
+
+  .details {
+    position: static;
+    max-width: none;
+    padding: 18px 14px 0;
+    gap: 16px;
+  }
+
+  .badge {
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+
+  .headline {
+    font-size: 32px;
+  }
+
+  .description {
+    font-size: 14px;
+  }
+
+  .price {
+    font-size: 26px;
+  }
+
+  .priceNote {
+    font-size: 12px;
+  }
+
+  .statusText,
+  .statusTextMuted {
+    font-size: 14px;
+  }
+
+  .skuLine {
+    font-size: 12px;
+  }
+
+  .inThisSetImage {
+    width: 48px;
+  }
+
+  .inThisSetName {
+    font-size: 13px;
+  }
+
+  .inThisSetLine {
+    font-size: 12px;
+  }
+
+  .buyRow {
+    display: grid;
+    grid-template-columns: 124px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .quantity {
+    width: auto;
+    height: 52px;
+  }
+
+  .quantityBtn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .addSet {
+    height: 52px;
+    font-size: 16px;
+  }
+
+  .howPanel {
+    margin: 0;
+    padding: 14px;
+  }
+
+  .howList {
+    font-size: 13px;
+  }
+
+  .componentImage {
+    width: 72px;
+  }
+
+  .componentName {
+    font-size: 14px;
+  }
+
+  .componentLine {
+    font-size: 12px;
+  }
+
+  .separately {
+    font-size: 13px;
+  }
+
+  .section {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 28px 14px 0;
+  }
+
+  .sectionTitle {
+    font-size: 26px;
+    margin-bottom: 12px;
+  }
+
+  .detailsTerm {
+    font-size: 14px;
+  }
+
+  /* The narrow fixed board (11) trims the table to size and weight. */
+  .detailsRow {
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 12px;
+    padding: 9px 0;
+  }
+
+  .detailsDefinition {
+    font-size: 14px;
+  }
+
+  .reviewsTitle {
+    font-size: 16px;
+    font-family: inherit;
+    font-weight: 600;
+  }
+
+  .reviewsBody {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}

@@ -1,0 +1,680 @@
+/* ------------------------------------------------------------------ *
+ * Wishlist page — Stage 3 wishlist boards (desktop 1440, mobile 390).
+ * Sidebar + card grid + states + toast, board metrics kept exactly.
+ * ------------------------------------------------------------------ */
+
+.main {
+  flex: 1;
+  max-width: var(--hw-content-max);
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 28px var(--hw-gutter) 96px;
+}
+
+.columns {
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+}
+
+.sidebarSlot {
+  width: 264px;
+  flex: none;
+}
+
+.mobileBack {
+  display: none;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.headRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px 24px;
+}
+
+.headline {
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: clamp(36px, 3.4vw, 44px);
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+}
+
+.headlineBody {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--hw-text-secondary);
+}
+
+.countText {
+  padding-top: 8px;
+  font-size: 14px;
+  color: var(--hw-text-secondary);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+  gap: 28px 20px;
+}
+
+/* ---------------- card ---------------- */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cardMedia {
+  position: relative;
+}
+
+.cardImageLink {
+  display: block;
+}
+
+.cardImage {
+  width: 100%;
+  /* Override the intrinsic height attribute so the 4:5 ratio applies. */
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 4px;
+  background: var(--hw-bg-well);
+  transition: filter 0.12s ease;
+}
+
+.cardImageLink:hover .cardImage {
+  filter: brightness(0.965);
+}
+
+.cardBadge {
+  position: absolute;
+  top: 10px;
+  inset-inline-start: 10px;
+  padding: 5px 10px;
+  border-radius: var(--hw-radius-pill);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cardBadgePre {
+  background: var(--hw-bg-surface);
+  color: var(--hw-status-info);
+  box-shadow: 0 0 0 1px var(--hw-border-default) inset;
+}
+
+.cardHeart {
+  position: absolute;
+  top: 10px;
+  inset-inline-end: 10px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--hw-bg-surface);
+  box-shadow: 0 1px 4px rgba(36, 40, 38, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding-top: 12px;
+}
+
+.cardSwatchRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 18px;
+}
+
+.cardSwatch {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(36, 40, 38, 0.18);
+}
+
+.cardSwatchStrike {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top right,
+    transparent calc(50% - 0.75px),
+    var(--hw-text-primary) calc(50% - 0.75px),
+    var(--hw-text-primary) calc(50% + 0.75px),
+    transparent calc(50% + 0.75px)
+  );
+  border-radius: 50%;
+}
+
+.cardSwatchNote {
+  font-size: 13px;
+  color: var(--hw-text-subtle);
+}
+
+.cardNoteRow {
+  font-size: 12px;
+  color: var(--hw-text-muted);
+  min-height: 18px;
+}
+
+.cardTitleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cardBrand {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--hw-text-muted);
+}
+
+.cardName {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.cardPriceRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 10px;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.cardPrice {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.cardPriceOffer {
+  color: var(--hw-text-offer);
+}
+
+.cardPriceMuted {
+  color: var(--hw-text-muted);
+}
+
+.cardPriceFrom {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.cardPriceFrom bdi {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.cardWas {
+  font-size: 14px;
+  color: var(--hw-text-muted);
+}
+
+.cardAvailability {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.availOk {
+  color: var(--hw-status-available);
+}
+
+.availPartial {
+  color: var(--hw-status-available);
+}
+
+.availInfo {
+  color: #2f3a5a;
+  font-weight: 500;
+}
+
+.availMuted {
+  color: var(--hw-text-muted);
+  font-weight: 600;
+}
+
+.cardActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.moveToCart {
+  height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-text-primary);
+  color: var(--hw-text-on-dark);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.12s ease;
+}
+
+.moveToCart:hover {
+  filter: brightness(0.9);
+}
+
+.chooseOptions {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-bg-surface);
+  box-shadow: 0 0 0 1.5px var(--hw-text-primary) inset;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.chooseOptions:hover {
+  filter: brightness(0.965);
+}
+
+.preOptions {
+  color: var(--hw-text-primary);
+}
+
+.disabledAction {
+  height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-bg-disabled);
+  color: var(--hw-text-muted);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: not-allowed;
+}
+
+.disabledReason {
+  flex: 1 1 100%;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--hw-text-muted);
+}
+
+.removeText {
+  margin-inline-start: auto;
+  height: 44px;
+  padding: 0 6px;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--hw-text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+.removeText:hover {
+  color: var(--hw-status-error);
+}
+
+.footnote {
+  font-size: 13px;
+  color: var(--hw-text-subtle);
+}
+
+/* ---------------- empty ---------------- */
+
+.emptyBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 72px 24px;
+  background: var(--hw-bg-surface);
+  border-radius: var(--hw-radius-overlay);
+  box-shadow: inset 0 0 0 1px var(--hw-border-default);
+}
+
+.emptyIcon {
+  color: var(--hw-text-muted);
+}
+
+.emptyTitle {
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.1;
+}
+
+.emptyBody {
+  max-width: 440px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--hw-text-secondary);
+}
+
+.emptyActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding-top: 10px;
+}
+
+.emptyPrimary {
+  display: inline-flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 24px;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-action-primary);
+  color: var(--hw-text-on-dark);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.emptyPrimary:hover {
+  color: var(--hw-text-on-dark);
+  filter: brightness(0.9);
+}
+
+.emptyOutline {
+  display: inline-flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 24px;
+  border-radius: var(--hw-radius-pill);
+  box-shadow: 0 0 0 1.5px var(--hw-text-primary) inset;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* ---------------- toast ---------------- */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  z-index: var(--hw-z-toast);
+  width: max-content;
+  max-width: calc(100% - 32px);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 10px 10px 18px;
+  background: var(--hw-bg-dark);
+  color: var(--hw-text-inverse);
+  border-radius: var(--hw-radius-md);
+  box-shadow: var(--hw-shadow-toast);
+  font-size: 15px;
+}
+
+.toastCheck {
+  color: #b9d3be;
+}
+
+.toastText {
+  white-space: nowrap;
+}
+
+.toastUndo {
+  height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--hw-radius-pill);
+  background: var(--hw-bg-page);
+  color: var(--hw-text-primary);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.toastLink {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 8px;
+  color: var(--hw-text-inverse);
+  font-weight: 600;
+  text-underline-offset: 4px;
+}
+
+.demoNote {
+  font-size: 12px;
+  color: var(--hw-text-muted);
+  text-align: center;
+  margin-top: 40px;
+}
+
+/* ---------------- loading skeleton ---------------- */
+
+.shimmer {
+  background: linear-gradient(90deg, #efe8de 0%, #f6f1ea 50%, #efe8de 100%);
+  background-size: 200% 100%;
+  animation: hw-wl-sk 1.4s ease-in-out infinite;
+  border-radius: 4px;
+  display: block;
+}
+
+@keyframes hw-wl-sk {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer {
+    animation: none;
+  }
+}
+
+.loadingStack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.loadingGreeting {
+  height: 26px;
+  width: 70%;
+  margin-bottom: 8px;
+}
+
+.loadingNavRow {
+  height: 20px;
+}
+
+.loadingHeadline {
+  height: 44px;
+  width: 40%;
+}
+
+.loadingCardMedia {
+  aspect-ratio: 4 / 5;
+  width: 100%;
+}
+
+.loadingName {
+  height: 15px;
+  width: 80%;
+  margin-top: 10px;
+}
+
+.loadingPrice {
+  height: 13px;
+  width: 40%;
+}
+
+/* ---------------- narrow (390 board) ---------------- */
+
+@media (max-width: 1023px) {
+  .main {
+    padding: 4px 14px 56px;
+  }
+
+  .columns {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* Narrow boards: no section menu here; the back link leads to it. */
+  .sidebarSlot {
+    display: none;
+  }
+
+  .mobileBack {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--hw-text-primary);
+    text-decoration: none;
+  }
+
+  .content {
+    gap: 14px;
+    width: 100%;
+  }
+
+  .headline {
+    font-size: 32px;
+  }
+
+  .headlineBody {
+    font-size: 14px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 12px;
+  }
+
+  .cardImage {
+    border-radius: 6px;
+  }
+
+  .cardHeart {
+    width: 36px;
+    height: 36px;
+  }
+
+  .cardName {
+    font-size: 14px;
+  }
+
+  .cardPrice {
+    font-size: 15px;
+  }
+
+  .cardPriceFrom bdi {
+    font-size: 15px;
+  }
+
+  .cardAvailability {
+    font-size: 12px;
+  }
+
+  .cardActions {
+    gap: 6px;
+  }
+
+  .moveToCart,
+  .chooseOptions,
+  .disabledAction {
+    height: 44px;
+    padding: 0 14px;
+    font-size: 14px;
+  }
+
+  .cardBadge {
+    font-size: 11px;
+  }
+
+  .cardWas {
+    font-size: 12px;
+  }
+
+  .disabledReason {
+    font-size: 11.5px;
+  }
+
+  .removeText {
+    min-height: 44px;
+  }
+
+  .toast {
+    left: 12px;
+    right: 12px;
+    bottom: 16px;
+    transform: none;
+    width: auto;
+    gap: 10px;
+    padding: 8px 8px 8px 14px;
+    min-height: 56px;
+    font-size: 14px;
+  }
+
+  .toastText {
+    flex: 1;
+    white-space: normal;
+    line-height: 1.4;
+  }
+
+  .toastUndo {
+    flex: none;
+  }
+
+  .toastLink {
+    flex: none;
+  }
+
+  .demoNote {
+    margin-top: 24px;
+    font-size: 11px;
+  }
+}

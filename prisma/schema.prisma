@@ -1,0 +1,1283 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../apps/api/src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Milestone 01 intentionally defined no business models.
+//
+// Milestone 02 introduces the Identity and Access capability. The models below are owned
+// exclusively by the Identity and Access module; no other module may read or write them.
+// See specs/002-authentication-authorization/data-model.md.
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+}
+
+enum IdentityTokenPurpose {
+  PASSWORD_RESET
+  MFA_ENROLLMENT
+  MFA_VERIFICATION
+}
+
+enum SecurityEventType {
+  USER_REGISTERED
+  REGISTRATION_REJECTED
+  LOGIN_SUCCEEDED
+  LOGIN_FAILED
+  ACCOUNT_LOCKED
+  MFA_ENROLLMENT_STARTED
+  MFA_ENROLLED
+  MFA_VERIFIED
+  MFA_VERIFICATION_FAILED
+  RECOVERY_CODE_USED
+  PASSWORD_RESET_REQUESTED
+  PASSWORD_RESET_COMPLETED
+  PASSWORD_CHANGED
+  SESSION_REVOKED
+  SESSIONS_REVOKED
+  SESSION_REJECTED
+  ADMIN_ACCESS_DENIED
+  ADMIN_ACCESS_GRANTED
+  NOTIFICATION_DELIVERY_SKIPPED
+}
+
+enum SecurityEventOutcome {
+  SUCCESS
+  FAILURE
+  DENIED
+}
+
+model User {
+  authVersion         Int       @default(0) @map("auth_version")
+  id                  String    @id @default(uuid(4)) @db.Uuid
+  email               String    @unique
+  passwordHash        String    @map("password_hash")
+  role                UserRole  @default(CUSTOMER)
+  failedLoginAttempts Int       @default(0) @map("failed_login_attempts")
+  lockedUntil         DateTime? @map("locked_until")
+  passwordChangedAt   DateTime? @map("password_changed_at")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  sessions       Session[]
+  identityTokens IdentityToken[]
+  mfaCredential  AdminMfaCredential?
+  recoveryCodes  AdminMfaRecoveryCode[]
+  securityEvents SecurityEvent[]        @relation("SecurityEventActor")
+
+  @@map("users")
+}
+
+model Session {
+  authVersion   Int       @default(0) @map("auth_version")
+  id            String    @id @default(uuid(4)) @db.Uuid
+  userId        String    @map("user_id") @db.Uuid
+  tokenHash     String    @unique @map("token_hash")
+  clientLabel   String?   @map("client_label")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  lastUsedAt    DateTime  @default(now()) @map("last_used_at")
+  expiresAt     DateTime  @map("expires_at")
+  revokedAt     DateTime? @map("revoked_at")
+  revokedReason String?   @map("revoked_reason")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model IdentityToken {
+  authVersion   Int                  @default(0) @map("auth_version")
+  id            String               @id @default(uuid(4)) @db.Uuid
+  userId        String               @map("user_id") @db.Uuid
+  purpose       IdentityTokenPurpose
+  tokenHash     String               @unique @map("token_hash")
+  createdAt     DateTime             @default(now()) @map("created_at")
+  expiresAt     DateTime             @map("expires_at")
+  consumedAt    DateTime?            @map("consumed_at")
+  invalidatedAt DateTime?            @map("invalidated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, purpose])
+  @@map("identity_tokens")
+}
+
+model AdminMfaCredential {
+  userId           String    @id @map("user_id") @db.Uuid
+  secretCiphertext String    @map("secret_ciphertext")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  confirmedAt      DateTime? @map("confirmed_at")
+  lastAcceptedStep Int?      @map("last_accepted_step")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("admin_mfa_credentials")
+}
+
+model AdminMfaRecoveryCode {
+  id        String    @id @default(uuid(4)) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  codeHash  String    @unique @map("code_hash")
+  createdAt DateTime  @default(now()) @map("created_at")
+  usedAt    DateTime? @map("used_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("admin_mfa_recovery_codes")
+}
+
+model SecurityEvent {
+  id            String               @id @default(uuid(4)) @db.Uuid
+  eventType     SecurityEventType    @map("event_type")
+  outcome       SecurityEventOutcome
+  actorUserId   String?              @map("actor_user_id") @db.Uuid
+  actorRole     UserRole?            @map("actor_role")
+  correlationId String               @map("correlation_id") @db.Uuid
+  detail        Json?
+  createdAt     DateTime             @default(now()) @map("created_at")
+
+  actor User? @relation("SecurityEventActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([actorUserId])
+  @@index([createdAt])
+  @@map("security_events")
+}
+
+// Milestone 03 introduces the Customer Profiles capability. The models below are owned exclusively by
+// the Customers module; no other module may read or write them. See
+// specs/003-customer-profiles/data-model.md.
+//
+// `user_id` is a stable foreign identifier only: the customers tables deliberately keep no foreign key
+// to the Identity-owned `users` table, because account deletion and retention are unresolved
+// (HC-DEC-003) and a cross-module key would couple the two modules' schema evolution.
+
+model CustomerProfile {
+  id               String   @id @default(uuid(4)) @db.Uuid
+  userId           String   @unique @map("user_id") @db.Uuid
+  displayName      String?  @map("display_name")
+  phone            String?
+  defaultAddressId String?  @unique @map("default_address_id") @db.Uuid
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  defaultAddress CustomerAddress?  @relation("CustomerDefaultAddress", fields: [defaultAddressId], references: [id], onDelete: SetNull)
+  addresses      CustomerAddress[] @relation("CustomerAddresses")
+  wishlistItems  CustomerWishlistItem[]
+
+  @@map("customer_profiles")
+}
+
+model CustomerAddress {
+  id            String   @id @default(uuid(4)) @db.Uuid
+  customerId    String   @map("customer_id") @db.Uuid
+  recipientName String   @map("recipient_name")
+  line1         String
+  line2         String?
+  city          String
+  region        String?
+  postalCode    String?  @map("postal_code")
+  countryCode   String   @map("country_code") @db.Char(2)
+  phone         String?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  customer   CustomerProfile  @relation("CustomerAddresses", fields: [customerId], references: [id], onDelete: Cascade)
+  defaultFor CustomerProfile? @relation("CustomerDefaultAddress")
+
+  @@index([customerId])
+  @@map("customer_addresses")
+}
+
+// Milestone 07 adds the customer's wishlist to the Customers module.
+//
+// The item references the catalog's product through a deliberate cross-module foreign key, exactly
+// as the Inventory module references the catalog's SKUs (specs/005 research R2). The cascade
+// guarantees a wishlist never references a product that no longer exists. The Customers module
+// imports no catalog code. See specs/007-cart-wishlist/research.md R3.
+model CustomerWishlistItem {
+  id         String   @id @default(uuid(4)) @db.Uuid
+  customerId String   @map("customer_id") @db.Uuid
+  productId  String   @map("product_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  customer CustomerProfile @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  product  Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([customerId, productId])
+  @@index([productId])
+  @@map("customer_wishlist_items")
+}
+
+// Milestone 04 introduces the Product Catalog capability. The models below are owned exclusively by
+// the Catalog module; no other module may read or write them. See
+// specs/004-product-catalog/data-model.md.
+//
+// Prices are exact integer minor units paired with an explicit 3-letter currency; no floating-point
+// or decimal type is used (constitution principle VIII). Inventory quantity is deliberately absent:
+// it belongs to Milestone 05.
+
+enum ProductStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model Category {
+  id        String   @id @default(uuid(4)) @db.Uuid
+  name      String
+  slug      String   @unique
+  parentId  String?  @map("parent_id") @db.Uuid
+  position  Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  parent   Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: Restrict)
+  children Category[] @relation("CategoryHierarchy")
+  products Product[]
+
+  @@index([parentId])
+  @@map("categories")
+}
+
+model Brand {
+  id        String   @id @default(uuid(4)) @db.Uuid
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  products Product[]
+
+  @@map("brands")
+}
+
+model Product {
+  id             String        @id @default(uuid(4)) @db.Uuid
+  name           String
+  slug           String        @unique
+  description    String
+  status         ProductStatus @default(DRAFT)
+  categoryId     String        @map("category_id") @db.Uuid
+  brandId        String        @map("brand_id") @db.Uuid
+  basePriceMinor Int           @map("base_price_minor")
+  baseCurrency   String        @map("base_currency") @db.Char(3)
+  // Milestone 06 direct product discount and the price the customer pays. The effective price is
+  // derived from the base price and the discount and is constrained by hand-written CHECK
+  // constraints, so the database refuses any inconsistent value. See specs/006-pricing-search.
+  discountBasisPoints Int      @default(0) @map("discount_basis_points")
+  effectivePriceMinor Int       @default(0) @map("effective_price_minor")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+
+  category      Category                  @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  brand         Brand                     @relation(fields: [brandId], references: [id], onDelete: Restrict)
+  images        ProductImage[]
+  attributes    ProductAttribute[]
+  variants      ProductVariant[]
+  bundle        Bundle?
+  wishlistItems CustomerWishlistItem[]
+  taxClassification TaxClassification?
+
+  @@index([categoryId])
+  @@index([brandId])
+  @@index([status, name, id])
+  @@index([status, effectivePriceMinor], map: "products_status_effective_price_idx")
+  @@map("products")
+}
+
+model ProductImage {
+  id        String   @id @default(uuid(4)) @db.Uuid
+  productId String   @map("product_id") @db.Uuid
+  url       String
+  altText   String?  @map("alt_text")
+  position  Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, position])
+  @@index([productId])
+  @@map("product_images")
+}
+
+model ProductAttribute {
+  id        String   @id @default(uuid(4)) @db.Uuid
+  productId String   @map("product_id") @db.Uuid
+  name      String
+  value     String
+  position  Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, name])
+  @@index([productId])
+  @@map("product_attributes")
+}
+
+model ProductVariant {
+  id        String   @id @default(uuid(4)) @db.Uuid
+  productId String   @map("product_id") @db.Uuid
+  sku       String   @unique
+  color     String?
+  size      String?
+  material  String?
+  position  Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  inventoryItem    InventoryItem?
+  bundleComponents BundleComponent[]
+  cartItems        CartItem[]
+
+  @@index([productId])
+  @@map("product_variants")
+}
+
+// ---------------------------------------------------------------------------------------------
+// Milestone 05 - Inventory and Bundles.
+//
+// Stock is tracked per SKU (the catalog ProductVariant). `variant_id` is a deliberate, recorded
+// cross-module foreign key to `product_variants` with ON DELETE RESTRICT (Milestone 05 research R2):
+// the inventory module imports no catalog code, but the database refuses to delete a variant that
+// still has stock or a bundle component, so no stock can ever point at nothing.
+//
+// Quantities are exact non-negative integers. The non-negative and positivity CHECK constraints are
+// added by hand in the migration because Prisma does not model CHECK constraints.
+// ---------------------------------------------------------------------------------------------
+
+enum ReservationStatus {
+  ACTIVE
+  CONFIRMED
+  RELEASED
+  EXPIRED
+}
+
+enum StockMovementReason {
+  ADJUSTMENT
+  RESERVATION_CREATED
+  RESERVATION_RELEASED
+  RESERVATION_EXPIRED
+  RESERVATION_CONFIRMED
+  RESTOCK
+}
+
+enum BundleKind {
+  FIXED
+  DYNAMIC
+}
+
+model InventoryItem {
+  id        String   @id @default(uuid(4)) @db.Uuid
+  variantId String?  @unique @map("variant_id") @db.Uuid
+  bundleId  String?  @unique @map("bundle_id") @db.Uuid
+  onHand    Int      @default(0) @map("on_hand")
+  reserved  Int      @default(0) @map("reserved")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  variant          ProductVariant?   @relation(fields: [variantId], references: [id], onDelete: Restrict)
+  bundle           Bundle?           @relation(fields: [bundleId], references: [id], onDelete: Restrict)
+  movements        StockMovement[]
+  reservationLines ReservationLine[]
+
+  @@map("inventory_items")
+}
+
+model StockMovement {
+  id            String              @id @default(uuid(4)) @db.Uuid
+  inventoryId   String              @map("inventory_id") @db.Uuid
+  reason        StockMovementReason
+  note          String?
+  onHandDelta   Int                 @map("on_hand_delta")
+  reservedDelta Int                 @map("reserved_delta")
+  onHandAfter   Int                 @map("on_hand_after")
+  reservedAfter Int                 @map("reserved_after")
+  reservationId String?             @map("reservation_id") @db.Uuid
+  // The stable business key of the movement, which makes a repeated movement idempotent.
+  reference     String?             @unique @map("reference")
+  createdAt     DateTime            @default(now()) @map("created_at")
+
+  inventory   InventoryItem @relation(fields: [inventoryId], references: [id], onDelete: Restrict)
+  reservation Reservation?  @relation(fields: [reservationId], references: [id], onDelete: SetNull)
+
+  @@index([inventoryId])
+  @@index([createdAt])
+  @@map("stock_movements")
+}
+
+model Reservation {
+  id             String            @id @default(uuid(4)) @db.Uuid
+  status         ReservationStatus @default(ACTIVE)
+  idempotencyKey String            @unique @map("idempotency_key")
+  expiresAt      DateTime          @map("expires_at")
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+
+  lines     ReservationLine[]
+  movements StockMovement[]
+
+  @@index([status, expiresAt])
+  @@map("reservations")
+}
+
+model ReservationLine {
+  id            String @id @default(uuid(4)) @db.Uuid
+  reservationId String @map("reservation_id") @db.Uuid
+  inventoryId   String @map("inventory_id") @db.Uuid
+  quantity      Int
+
+  reservation Reservation   @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  inventory   InventoryItem @relation(fields: [inventoryId], references: [id], onDelete: Restrict)
+
+  @@unique([reservationId, inventoryId])
+  @@map("reservation_lines")
+}
+
+model Bundle {
+  id          String     @id @default(uuid(4)) @db.Uuid
+  productId   String     @unique @map("product_id") @db.Uuid
+  kind        BundleKind @default(FIXED)
+  name        String
+  description String?
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  product       Product           @relation(fields: [productId], references: [id], onDelete: Restrict)
+  components    BundleComponent[]
+  inventoryItem InventoryItem?
+  cartItems     CartItem[]
+
+  @@map("bundles")
+}
+
+model BundleComponent {
+  id          String @id @default(uuid(4)) @db.Uuid
+  bundleId    String @map("bundle_id") @db.Uuid
+  variantId   String @map("variant_id") @db.Uuid
+  quantity    Int?
+  minQuantity Int?   @map("min_quantity")
+  maxQuantity Int?   @map("max_quantity")
+  position    Int    @default(0)
+
+  bundle  Bundle         @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+  variant ProductVariant @relation(fields: [variantId], references: [id], onDelete: Restrict)
+
+  @@unique([bundleId, variantId])
+  @@map("bundle_components")
+}
+
+// ---------------------------------------------------------------------------------------------
+// Milestone 07 - Cart.
+//
+// A cart is an intent record, not a commitment: it never reserves or holds stock, and the
+// reservation timing stays open under HC-DEC-004.
+//
+// `user_id` is the Identity-owned customer as a stable foreign identifier only; there is no
+// foreign key to the Identity `users` table, for the same reason the Customers module has none
+// (HC-DEC-003 is open). The unique constraint makes "one cart per customer" structural.
+//
+// `cart_items.variant_id` is a deliberate cross-module foreign key to the catalog's SKU, with
+// ON DELETE RESTRICT so a SKU that is in someone's cart cannot be deleted out from under them.
+// The Cart module imports no catalog code. See specs/007-cart-wishlist/research.md R2.
+// ---------------------------------------------------------------------------------------------
+
+model Cart {
+  id        String   @id @default(uuid(4)) @db.Uuid
+  userId    String   @unique @map("user_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  items CartItem[]
+
+  @@map("carts")
+}
+
+model CartItem {
+  id             String   @id @default(uuid(4)) @db.Uuid
+  cartId         String   @map("cart_id") @db.Uuid
+  // A cart line names either a catalog SKU or a bundle, never both and never neither. The
+  // exactly-one-owner constraint is hand-added, exactly as `inventory_items` carries one, because
+  // Prisma cannot express it. A FIXED bundle is an independently stocked finished good, and a
+  // DYNAMIC bundle resolves to its approved component composition, so both are sellable lines.
+  variantId      String?  @map("variant_id") @db.Uuid
+  bundleId       String?  @map("bundle_id") @db.Uuid
+  quantity       Int
+  unitPriceMinor Int      @map("unit_price_minor")
+  unitCurrency   String   @map("unit_currency") @db.Char(3)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  cart    Cart            @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  variant ProductVariant? @relation(fields: [variantId], references: [id], onDelete: Restrict)
+  bundle  Bundle?         @relation(fields: [bundleId], references: [id], onDelete: Restrict)
+
+  @@unique([cartId, variantId])
+  @@unique([cartId, bundleId])
+  @@index([variantId])
+  @@index([bundleId])
+  @@map("cart_items")
+}
+
+// ---------------------------------------------------------------------------------------------
+// Milestone 08 - Tax.
+//
+// The tax rules are configuration data, not code: the approved decision forbids hardcoding a rate
+// as a universal rate, so every rate lives in a row with an environment scope, a jurisdiction, a
+// product classification, an effective window, and a priority. The environment scope is what makes
+// "no production tax without an approved configuration" structural rather than a convention.
+//
+// `classification` is a free classification code rather than an enum, because the approved set of
+// classifications is a tax-policy decision that is not approved yet. The `STANDARD` code is the
+// documented default for a product with no explicit classification.
+//
+// `tax_classifications.product_id` is a deliberate cross-module foreign key to the catalog's
+// products, with ON DELETE CASCADE so a classification never outlives its product. The Tax module
+// imports no catalog code. See specs/008-checkout-tax/research.md R14.
+// ---------------------------------------------------------------------------------------------
+
+// The environment scope of a tax rule or a checkout destination.
+//
+// A rule and a destination are configured for one environment only, so a `TEST` rule can never apply
+// to a production request and a production request finds no destination until one is approved and
+// configured. That makes "no production tax without an approved configuration" structural rather
+// than a convention.
+enum EnvironmentScope {
+  TEST
+  PRODUCTION
+}
+
+model TaxRule {
+  id              String           @id @default(uuid(4)) @db.Uuid
+  environment     EnvironmentScope @default(TEST)
+  jurisdiction    String           @db.Char(2)
+  classification  String           @default("STANDARD")
+  rateBasisPoints Int              @map("rate_basis_points")
+  taxInclusive    Boolean          @default(false) @map("tax_inclusive")
+  effectiveFrom   DateTime         @map("effective_from")
+  effectiveTo     DateTime?        @map("effective_to")
+  priority        Int              @default(0)
+  // The administrator who created and last changed the rule, so every change is attributable to an
+  // actor. There is deliberately no foreign key to the Identity `users` table, for the same reason
+  // the Customers module has none: HC-DEC-003 leaves account deletion and retention unresolved.
+  createdByUserId String?          @map("created_by_user_id") @db.Uuid
+  updatedByUserId String?          @map("updated_by_user_id") @db.Uuid
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+
+  @@unique([environment, jurisdiction, classification, effectiveFrom], map: "tax_rules_environment_jurisdiction_classification_effective_fro")
+  @@index([environment, jurisdiction, classification])
+  @@map("tax_rules")
+}
+
+model TaxClassification {
+  productId      String   @id @map("product_id") @db.Uuid
+  classification String   @default("STANDARD")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("tax_classifications")
+}
+
+// ---------------------------------------------------------------------------------------------
+// Milestone 08 - Checkout destinations.
+//
+// A destination is approved for checkout by configuration, scoped to an environment so a production
+// request finds no destination until one is approved. A destination carries the tax jurisdiction it
+// uses and whether shipping is approved for it, because the approved decision requires BOTH an
+// approved shipping rule and an approved tax rule before a destination may check out.
+// ---------------------------------------------------------------------------------------------
+
+model CheckoutDestination {
+  countryCode      String           @map("country_code") @db.Char(2)
+  environment      EnvironmentScope @default(TEST)
+  enabled          Boolean          @default(false)
+  taxJurisdiction  String           @map("tax_jurisdiction") @db.Char(2)
+  shippingApproved Boolean          @default(false) @map("shipping_approved")
+  label            String
+  // The administrator who approved or last changed the destination, so every change is
+  // attributable to an actor.
+  updatedByUserId  String?          @map("updated_by_user_id") @db.Uuid
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+
+  @@id([countryCode, environment])
+  @@map("checkout_destinations")
+}
+
+// ---------------------------------------------------------------------------------------------
+// Milestone 09 - Orders and Pre-orders.
+//
+// The order is the platform's promise to the customer and the first durable commercial record in
+// it, so it stores an immutable snapshot of every figure the customer confirmed: the price, the
+// discount, the tax rate, the tax amount, the currency, and the bundle composition. A later
+// catalog change cannot alter a purchase, because the order never reads its figures back.
+//
+// `customer_id` is the Identity-owned customer as a stable identifier only, for the same reason
+// the Cart and the Wishlist have none: HC-DEC-003 leaves account deletion and retention
+// unresolved.
+//
+// The reservation is the Inventory capability's own record, and the order holds its identifier so
+// the two are connected without either capability reaching into the other's tables.
+// ---------------------------------------------------------------------------------------------
+
+enum OrderStatus {
+  REFUNDED
+  PENDING_PAYMENT
+  PAID
+  // The payment arrived but the reservation was already gone, so the money is recorded and the
+  // stock is not allocated. The discrepancy is recorded as an event and resolved by reconciliation.
+  PAID_PENDING_ALLOCATION
+  PAYMENT_FAILED
+  CANCELLED
+  EXPIRED
+  FULFILLED
+}
+
+enum OrderActor {
+  CUSTOMER
+  ADMIN
+  SYSTEM
+}
+
+enum PreOrderStatus {
+  AWAITING_STOCK
+  STOCK_RESERVED
+  AWAITING_PAYMENT
+  CONVERTED
+  CANCELLED
+  EXPIRED
+}
+
+model Order {
+  refundedMinor Int @default(0) @map("refunded_minor")
+  id                String      @id @default(uuid(4)) @db.Uuid
+  // The Identity-owned customer, as a stable identifier only.
+  customerId        String      @map("customer_id") @db.Uuid
+  status            OrderStatus @default(PENDING_PAYMENT)
+  // The settlement currency of every amount on the order.
+  currency          String      @db.Char(3)
+  // The exact integer minor units of the line totals, before tax.
+  subtotalMinor     Int         @map("subtotal_minor")
+  // The exact integer minor units of the tax.
+  taxTotalMinor     Int         @map("tax_total_minor")
+  // The exact integer minor units the customer pays.
+  totalMinor        Int         @map("total_minor")
+  // The destination the order was quoted for, and the jurisdiction its tax rules came from.
+  destinationCountryCode String  @map("destination_country_code") @db.Char(2)
+  taxJurisdiction   String      @map("tax_jurisdiction") @db.Char(2)
+  // The fingerprint of the quote the customer confirmed, so the evidence survives with the order.
+  quoteFingerprint  String      @map("quote_fingerprint")
+  // The Inventory capability's reservation, which holds the ordered stock.
+  reservationId     String?     @map("reservation_id") @db.Uuid
+  // The stable business key that makes a repeated request safe, scoped to the customer.
+  idempotencyKey    String      @map("idempotency_key")
+  // The reason the order left the pending state, when it did.
+  statusReason      String?     @map("status_reason")
+  expiresAt         DateTime    @map("expires_at")
+  createdAt         DateTime    @default(now()) @map("created_at")
+  updatedAt         DateTime    @updatedAt @map("updated_at")
+  paidAt            DateTime?   @map("paid_at")
+  cancelledAt       DateTime?   @map("cancelled_at")
+  fulfilledAt       DateTime?   @map("fulfilled_at")
+
+  lines    OrderLine[]
+  events   OrderEvent[]
+  preOrder PreOrder?
+
+  // One order per idempotency key per customer, so a repeated request finds the first order.
+  @@unique([customerId, idempotencyKey])
+  @@index([customerId, createdAt, id])
+  @@index([status, expiresAt])
+  @@map("orders")
+}
+
+model OrderLine {
+  id                String  @id @default(uuid(4)) @db.Uuid
+  orderId           String  @map("order_id") @db.Uuid
+  // The catalog SKU, when the line is a SKU.
+  variantId         String? @map("variant_id") @db.Uuid
+  // The bundle, when the line is a bundle.
+  bundleId          String? @map("bundle_id") @db.Uuid
+  // The cart line the order line came from, so the quote and the order can be matched up.
+  sourceLineId      String? @map("source_line_id") @db.Uuid
+  sku               String
+  productId         String  @map("product_id") @db.Uuid
+  productName       String  @map("product_name")
+  quantity          Int
+  // The snapshotted unit price, in exact integer minor units.
+  unitPriceMinor    Int     @map("unit_price_minor")
+  unitCurrency      String  @map("unit_currency") @db.Char(3)
+  // The snapshotted direct discount, in basis points.
+  discountBasisPoints Int   @map("discount_basis_points")
+  // The snapshotted tax rate, in basis points.
+  taxRateBasisPoints Int    @map("tax_rate_basis_points")
+  // True when the snapshotted price already included the tax.
+  taxInclusive      Boolean @default(false) @map("tax_inclusive")
+  // The snapshotted tax classification the line was assessed under.
+  taxClassification String  @default("STANDARD") @map("tax_classification")
+  // The exact integer minor units of the line before tax.
+  netMinor          Int     @map("net_minor")
+  // The exact integer minor units of the line's tax.
+  taxMinor          Int     @map("tax_minor")
+  // The exact integer minor units the customer pays for the line.
+  totalMinor        Int     @map("total_minor")
+  // The snapshotted bundle composition, so a later bundle change cannot alter the purchase.
+  composition       Json?
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@map("order_lines")
+}
+
+model OrderEvent {
+  id             String     @id @default(uuid(4)) @db.Uuid
+  orderId        String     @map("order_id") @db.Uuid
+  eventType      String     @map("event_type")
+  // The state the order was in, and the state it moved to. A refused transition records the
+  // attempted state and the reason, and leaves the order's own state unchanged.
+  previousStatus OrderStatus? @map("previous_status")
+  nextStatus     OrderStatus? @map("next_status")
+  // The customer, the administrator, or the system.
+  actor          OrderActor
+  // The stable identifier of the actor, when the actor is a customer or an administrator.
+  actorUserId    String?    @map("actor_user_id") @db.Uuid
+  // The external event's identifier, when the event came from outside the platform. It is unique, so
+  // a repeated or a delayed payment event is applied exactly once.
+  externalEventId String?   @unique @map("external_event_id")
+  reason         String?
+  // The non-sensitive detail of the event.
+  detail         Json?
+  createdAt      DateTime   @default(now()) @map("created_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId, createdAt, id])
+  @@map("order_events")
+}
+
+model PreOrder {
+  id                String         @id @default(uuid(4)) @db.Uuid
+  customerId        String         @map("customer_id") @db.Uuid
+  status            PreOrderStatus @default(AWAITING_STOCK)
+  // The exact integer minor units the customer will pay once the stock is available.
+  totalMinor        Int            @map("total_minor")
+  currency          String         @db.Char(3)
+  // The snapshotted lines, so the pre-order records what was intended.
+  lines             Json
+  // The order the pre-order became, once it was converted. It is unique because an order comes
+  // from at most one pre-order.
+  orderId           String?        @unique @map("order_id") @db.Uuid
+  // The Inventory capability's reservation, once the stock was held.
+  reservationId     String?        @map("reservation_id") @db.Uuid
+  statusReason      String?        @map("status_reason")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+  cancelledAt       DateTime?      @map("cancelled_at")
+
+  order Order? @relation(fields: [orderId], references: [id], onDelete: SetNull)
+
+  @@index([customerId, createdAt, id])
+  @@index([status, createdAt])
+  @@map("pre_orders")
+}
+
+// ---------------------------------------------------------------------------------------------
+// Milestone 10 - Payments and Refunds.
+//
+// The payment attempt is the record of one attempt to pay for an order. It stores the amount, the
+// currency, the provider, the provider's own reference, and the customer's business key, and it
+// stores **no** card number, credential, or other payment material.
+//
+// The provider event is the record of one event a provider delivered. Its identifier is unique, so
+// a repeated, a delayed, or an out-of-order delivery is applied exactly once, and its signature and
+// its verification outcome are recorded so a forged event is auditable.
+//
+// The refund is the record of one refund of a payment, and the audit trail is append-only.
+// ---------------------------------------------------------------------------------------------
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum RefundStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+}
+
+enum ProviderEventOutcome {
+  APPLIED
+  DUPLICATE
+  REJECTED
+  UNKNOWN_ORDER
+}
+
+model PaymentAttempt {
+  pendingRefundMinor Int @default(0) @map("pending_refund_minor")
+  id                String        @id @default(uuid(4)) @db.Uuid
+  orderId           String        @map("order_id") @db.Uuid
+  customerId        String        @map("customer_id") @db.Uuid
+  status            PaymentStatus @default(PENDING)
+  // The exact integer minor units this attempt covers.
+  amountMinor       Int           @map("amount_minor")
+  currency          String        @db.Char(3)
+  // The provider that owns the attempt.
+  provider          String
+  // The provider's own reference for the attempt.
+  providerReference String?       @map("provider_reference")
+  // The stable business key that makes a repeated request safe, scoped to the customer.
+  idempotencyKey    String        @map("idempotency_key")
+  // The exact integer minor units already refunded against this attempt.
+  refundedMinor     Int           @default(0) @map("refunded_minor")
+  // The provider event that last changed the attempt's state.
+  lastEventId       String?       @map("last_event_id")
+  statusReason      String?       @map("status_reason")
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+  succeededAt       DateTime?     @map("succeeded_at")
+  failedAt          DateTime?     @map("failed_at")
+
+  refunds Refund[]
+
+  // One attempt per idempotency key per customer, so a repeated request finds the first attempt.
+  @@unique([customerId, idempotencyKey])
+  @@index([orderId, createdAt, id])
+  @@index([provider, providerReference])
+  @@map("payment_attempts")
+}
+
+model ProviderEvent {
+  id                String               @id @default(uuid(4)) @db.Uuid
+  // The provider's own identifier for the event. It is unique, so the event is applied once.
+  provider          String
+  providerEventId   String               @map("provider_event_id")
+  eventType         String               @map("event_type")
+  // Whether the platform applied the event, ignored it as a duplicate, or refused it.
+  outcome           ProviderEventOutcome
+  // The order the event referred to, when the platform could resolve one.
+  orderId           String?              @map("order_id") @db.Uuid
+  // The payment attempt the event referred to, when the platform could resolve one.
+  paymentAttemptId  String?              @map("payment_attempt_id") @db.Uuid
+  // The reason the event was refused, when it was.
+  reason            String?
+  // The non-sensitive detail of the event.
+  detail            Json?
+  createdAt         DateTime             @default(now()) @map("created_at")
+
+  @@unique([provider, providerEventId])
+  @@index([orderId, createdAt, id])
+  @@map("provider_events")
+}
+
+model Refund {
+  id                String       @id @default(uuid(4)) @db.Uuid
+  paymentAttemptId  String       @map("payment_attempt_id") @db.Uuid
+  orderId           String       @map("order_id") @db.Uuid
+  customerId        String       @map("customer_id") @db.Uuid
+  status            RefundStatus @default(PENDING)
+  // The exact integer minor units this refund covers.
+  amountMinor       Int          @map("amount_minor")
+  currency          String       @db.Char(3)
+  reason            String?
+  // The stable business key that makes a repeated request safe, scoped to the customer.
+  idempotencyKey    String       @map("idempotency_key")
+  // The provider's own reference for the refund.
+  providerReference String?      @map("provider_reference")
+  createdAt         DateTime     @default(now()) @map("created_at")
+  updatedAt         DateTime     @updatedAt @map("updated_at")
+  succeededAt       DateTime?    @map("succeeded_at")
+
+  attempt PaymentAttempt @relation(fields: [paymentAttemptId], references: [id], onDelete: Cascade)
+
+  // One refund per idempotency key per customer, so a repeated request finds the first refund.
+  @@unique([customerId, idempotencyKey])
+  @@index([paymentAttemptId, createdAt, id])
+  @@map("refunds")
+}
+
+// ---------------------------------------------------------------------------------------------
+// Milestone 11 - Shipping and Fulfillment.
+//
+// A shipping destination and a shipping method are **administrator configuration**, not platform
+// rules: the platform carries no country list, computes no rate, and stores no delivery estimate.
+// Every method is environment-scoped, so a `TEST` configuration can never enable a production
+// checkout, and a production request finds no method until one is configured for production.
+//
+// A shipment records what it is - the destination, the method, the items, and a free-form tracking
+// reference an administrator set - and never a delivery commitment or a carrier-verified status.
+//
+// A return is a separate aggregate with its own lifecycle. It has no payment and no reservation, so
+// while it is requested it holds no money and has moved no stock.
+// ---------------------------------------------------------------------------------------------
+
+enum ShipmentStatus {
+  PREPARED
+  PACKED
+  HANDED_OVER
+  DELIVERED
+  CANCELLED
+}
+
+enum ReturnStatus {
+  REQUESTED
+  APPROVED
+  REJECTED
+  RECEIVED
+  REFUNDED
+  CANCELLED
+}
+
+model ShippingDestination {
+  countryCode   String          @map("country_code") @db.Char(2)
+  environment   EnvironmentScope @default(TEST)
+  enabled       Boolean         @default(false)
+  label         String
+  // The carrier, or null when no provider is activated. No provider is called.
+  carrierCode   String?         @map("carrier_code")
+  updatedByUserId String?       @map("updated_by_user_id") @db.Uuid
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+
+  @@id([countryCode, environment])
+  @@map("shipping_destinations")
+}
+
+model ShippingMethod {
+  id                    String          @id @default(uuid(4)) @db.Uuid
+  environment           EnvironmentScope @default(TEST)
+  code                  String
+  label                 String
+  // The destination the method applies to, or null for any enabled destination.
+  destinationCountryCode String?         @map("destination_country_code") @db.Char(2)
+  // The configured amount, in exact integer minor units. The platform computes no rate.
+  amountMinor           Int             @map("amount_minor")
+  currency              String          @db.Char(3)
+  active                Boolean         @default(true)
+  updatedByUserId       String?         @map("updated_by_user_id") @db.Uuid
+  createdAt             DateTime        @default(now()) @map("created_at")
+  updatedAt             DateTime        @updatedAt @map("updated_at")
+
+  @@unique([environment, code])
+  @@index([environment, destinationCountryCode])
+  @@map("shipping_methods")
+}
+
+model Shipment {
+  id                    String         @id @default(uuid(4)) @db.Uuid
+  // The order being fulfilled and its owner, as stable identifiers.
+  orderId               String         @map("order_id") @db.Uuid
+  customerId            String         @map("customer_id") @db.Uuid
+  status                ShipmentStatus @default(PREPARED)
+  // The destination snapshot.
+  destinationCountryCode String        @map("destination_country_code") @db.Char(2)
+  destinationLabel      String         @map("destination_label")
+  // The snapshotted shipping selection.
+  methodCode            String         @map("method_code")
+  methodLabel           String         @map("method_label")
+  amountMinor           Int            @map("amount_minor")
+  currency              String         @db.Char(3)
+  // A free-form reference an administrator set. No carrier is contacted or verified.
+  trackingReference     String?        @map("tracking_reference")
+  carrierCode           String?        @map("carrier_code")
+  dispatchedAt          DateTime?      @map("dispatched_at")
+  deliveredAt           DateTime?      @map("delivered_at")
+  cancelledAt           DateTime?      @map("cancelled_at")
+  statusReason          String?        @map("status_reason")
+  createdAt             DateTime       @default(now()) @map("created_at")
+  updatedAt             DateTime       @updatedAt @map("updated_at")
+
+  lines  ShipmentLine[]
+  events ShipmentEvent[]
+
+  // One shipment per order, so an accidental duplicate cannot send the goods twice.
+  @@unique([orderId])
+  @@index([customerId, createdAt, id])
+  @@index([status, createdAt])
+  @@map("shipments")
+}
+
+model ShipmentLine {
+  id           String   @id @default(uuid(4)) @db.Uuid
+  shipmentId   String   @map("shipment_id") @db.Uuid
+  orderLineId  String   @map("order_line_id") @db.Uuid
+  quantity     Int
+
+  shipment Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+
+  @@index([shipmentId])
+  @@map("shipment_lines")
+}
+
+model ShipmentEvent {
+  id             String          @id @default(uuid(4)) @db.Uuid
+  shipmentId     String          @map("shipment_id") @db.Uuid
+  eventType      String          @map("event_type")
+  previousStatus ShipmentStatus? @map("previous_status")
+  nextStatus     ShipmentStatus? @map("next_status")
+  actor          String
+  actorUserId    String?         @map("actor_user_id") @db.Uuid
+  reason         String?
+  detail         Json?
+  createdAt      DateTime        @default(now()) @map("created_at")
+
+  shipment Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+
+  @@index([shipmentId, createdAt, id])
+  @@map("shipment_events")
+}
+
+model ReturnRequest {
+  @@index([orderId, status])
+  id            String       @id @default(uuid(4)) @db.Uuid
+  // The order the return is against and its owner, as stable identifiers.
+  orderId       String       @map("order_id") @db.Uuid
+  customerId    String       @map("customer_id") @db.Uuid
+  status        ReturnStatus @default(REQUESTED)
+  reasonCode    String       @map("reason_code")
+  currency      String       @db.Char(3)
+  // The exact integer minor units the return covers.
+  totalMinor    Int          @map("total_minor")
+  // The Payments capability's refund, once one was requested.
+  refundId      String?      @map("refund_id") @db.Uuid
+  refundStatus  String?      @map("refund_status")
+  receivedAt    DateTime?    @map("received_at")
+  decidedAt     DateTime?    @map("decided_at")
+  cancelledAt   DateTime?    @map("cancelled_at")
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+
+  lines  ReturnLine[]
+  events ReturnEvent[]
+
+  @@index([orderId, createdAt, id])
+  @@index([customerId, createdAt, id])
+  @@index([status, createdAt])
+  @@map("returns")
+}
+
+model ReturnLine {
+  amountMinor Int? @map("amount_minor")
+  id           String   @id @default(uuid(4)) @db.Uuid
+  returnId     String   @map("return_id") @db.Uuid
+  orderLineId  String   @map("order_line_id") @db.Uuid
+  quantity     Int
+  // Whether the units went back into stock, so a repeated receive cannot restock them again.
+  restocked    Boolean  @default(false)
+
+  return ReturnRequest @relation(fields: [returnId], references: [id], onDelete: Cascade)
+
+  @@index([returnId])
+  @@map("return_lines")
+}
+
+model ReturnEvent {
+  id             String       @id @default(uuid(4)) @db.Uuid
+  returnId       String       @map("return_id") @db.Uuid
+  eventType      String       @map("event_type")
+  previousStatus ReturnStatus? @map("previous_status")
+  nextStatus     ReturnStatus? @map("next_status")
+  actor          String
+  actorUserId    String?      @map("actor_user_id") @db.Uuid
+  reason         String?
+  detail         Json?
+  createdAt      DateTime     @default(now()) @map("created_at")
+
+  return ReturnRequest @relation(fields: [returnId], references: [id], onDelete: Cascade)
+
+  @@index([returnId, createdAt, id])
+  @@map("return_events")
+}
+
+// ---------------------------------------------------------------------------------------------
+// Milestone 12 - Reviews and Notifications.
+//
+// A review is a customer's own statement about a product they bought, and it is **held for
+// moderation** before it is public. A review may only be written by a customer who holds a **paid**
+// order that contains the product, so a review is a verified purchase, and the platform records the
+// order that proves it.
+//
+// A notification is a **delivery attempt** of a message the platform produced, and it is delivered
+// through a provider behind a narrow interface. HC-DEC-014 leaves the channel open, so the only
+// shipped transports are local test transports, and the production transport sends nothing.
+// ---------------------------------------------------------------------------------------------
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Review {
+  id          String       @id @default(uuid(4)) @db.Uuid
+  // The reviewed product, as a stable identifier.
+  productId   String       @map("product_id") @db.Uuid
+  // The author, as a stable identifier.
+  customerId  String       @map("customer_id") @db.Uuid
+  // The paid order that proves the purchase, when the review is a verified purchase.
+  orderId     String?      @map("order_id") @db.Uuid
+  rating      Int
+  title       String
+  body        String
+  status      ReviewStatus @default(PENDING)
+  // True when a paid order of the author contains the reviewed product.
+  verifiedPurchase Boolean @default(false) @map("verified_purchase")
+  moderatedByUserId String? @map("moderated_by_user_id") @db.Uuid
+  moderatedAt DateTime?   @map("moderated_at")
+  moderationReason String? @map("moderation_reason")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  events ReviewEvent[]
+
+  // One review per product per customer, so a customer cannot flood a product with statements.
+  @@unique([productId, customerId])
+  @@index([productId, status, createdAt])
+  @@index([customerId, createdAt, id])
+  @@map("reviews")
+}
+
+// Append-only review moderation facts.
+model ReviewEvent {
+  id             String       @id @default(uuid(4)) @db.Uuid
+  reviewId       String       @map("review_id") @db.Uuid
+  eventType      String       @map("event_type")
+  previousStatus ReviewStatus? @map("previous_status")
+  nextStatus     ReviewStatus? @map("next_status")
+  actor          String
+  actorUserId    String?      @map("actor_user_id") @db.Uuid
+  reason         String?
+  detail         Json?
+  createdAt      DateTime     @default(now()) @map("created_at")
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@index([reviewId, createdAt, id])
+  @@map("review_events")
+}
+
+model Notification {
+  metadata Json @default("{}")
+  deliveryClaimedAt DateTime? @map("delivery_claimed_at")
+  deliveryClaimToken String? @map("delivery_claim_token") @db.Uuid
+  @@index([status, deliveryClaimedAt])
+  id                String    @id @default(uuid(4)) @db.Uuid
+  // The platform's own name for the message.
+  kind              String
+  // The recipient, as a stable identifier. The provider resolves the address.
+  recipientUserId   String    @map("recipient_user_id") @db.Uuid
+  subject           String
+  body              String
+  // PENDING, DELIVERED, FAILED, or SKIPPED.
+  status            String
+  provider          String?
+  providerReference String?   @map("provider_reference")
+  failureReason     String?   @map("failure_reason")
+  // The stable business key of the request, so a repeated request produces one notification.
+  idempotencyKey    String    @unique @map("idempotency_key")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+  sentAt            DateTime? @map("sent_at")
+
+  deliveries NotificationDelivery[]
+
+  @@index([kind, createdAt, id])
+  @@index([recipientUserId, createdAt, id])
+  @@map("notifications")
+}
+
+model NotificationDelivery {
+  actorUserId String? @map("actor_user_id") @db.Uuid
+  id             String   @id @default(uuid(4)) @db.Uuid
+  notificationId String   @map("notification_id") @db.Uuid
+  attempt        Int
+  provider       String
+  delivered      Boolean
+  failureReason  String?  @map("failure_reason")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+
+  @@index([notificationId, attempt])
+  @@map("notification_deliveries")
+}
+
+// Append-only application audit records. Existing historical actor/state is never invented.
+model PreOrderEvent {
+  id String @id @default(uuid(4)) @db.Uuid
+  preOrderId String @map("pre_order_id") @db.Uuid
+  previousStatus String? @map("previous_status")
+  nextStatus String @map("next_status")
+  actor String
+  actorUserId String? @map("actor_user_id") @db.Uuid
+  reason String?
+  reservationId String? @map("reservation_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+  @@index([preOrderId, createdAt, id])
+  @@map("pre_order_events")
+}
+
+model RefundEvent {
+  id String @id @default(uuid(4)) @db.Uuid
+  refundId String @map("refund_id") @db.Uuid
+  previousStatus String? @map("previous_status")
+  nextStatus String @map("next_status")
+  actorUserId String? @map("actor_user_id") @db.Uuid
+  reason String?
+  createdAt DateTime @default(now()) @map("created_at")
+  @@index([refundId, createdAt, id])
+  @@map("refund_events")
+}
+
+model TaxConfigurationEvent {
+  id String @id @default(uuid(4)) @db.Uuid
+  target String
+  action String
+  actorUserId String? @map("actor_user_id") @db.Uuid
+  before Json
+  after Json
+  createdAt DateTime @default(now()) @map("created_at")
+  @@index([target, createdAt, id])
+  @@map("tax_configuration_events")
+}
+
+model CheckoutConfigurationEvent {
+  id String @id @default(uuid(4)) @db.Uuid
+  target String
+  action String
+  actorUserId String? @map("actor_user_id") @db.Uuid
+  before Json
+  after Json
+  createdAt DateTime @default(now()) @map("created_at")
+  @@index([target, createdAt, id])
+  @@map("checkout_configuration_events")
+}
+
+model ShippingConfigurationEvent {
+ id String @id @default(uuid(4)) @db.Uuid
+ target String
+ actorUserId String? @map("actor_user_id") @db.Uuid
+ before Json
+ after Json
+ createdAt DateTime @default(now()) @map("created_at")
+ @@index([target, createdAt, id])
+ @@map("shipping_configuration_events")
+}

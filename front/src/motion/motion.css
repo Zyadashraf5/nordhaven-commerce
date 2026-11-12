@@ -1,0 +1,139 @@
+/* F07 motion — global hooks for the GSAP binder and Lenis.
+ *
+ * Nothing here hides content unless the pre-paint script in app/layout.tsx
+ * marked the page as motion-capable (`html.hw-motion`: JS on, no
+ * reduced-motion preference). Even then, a CSS failsafe reveals intro content
+ * after 2.4 s if the JS intro never runs, so content can't stay invisible. */
+
+/* First-paint intro: hidden until the binder plays it (or the failsafe fires). */
+html.hw-motion:not(.hw-intro-done) [data-intro] {
+  opacity: 0;
+  animation: hw-intro-failsafe 0.01s linear 2.4s forwards;
+}
+
+@keyframes hw-intro-failsafe {
+  to {
+    opacity: 1;
+  }
+}
+
+/* SplitText line masks keep the rising words clipped to their line. */
+.hw-split-line {
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+/* One soft highlight sweep over a discount badge (React Bits ShinyText, adapted). */
+.hw-shine {
+  --hw-shine-x: -60%;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hw-shine::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 70%
+  );
+  transform: translateX(var(--hw-shine-x));
+  pointer-events: none;
+}
+
+/* Parallax frames clip the drifting image. */
+[data-parallax-frame] {
+  overflow: hidden;
+}
+
+/* Lenis (https://github.com/darkroomengineering/lenis) recommended base styles. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.hw-motion:not(.hw-intro-done) [data-intro] {
+    opacity: 1;
+    animation: none;
+  }
+
+  .hw-shine::after {
+    display: none;
+  }
+}
+
+/* Overlay entrances (CSS: these mount and unmount with React state). The
+ * global reduced-motion rule in globals.css zeroes their duration. */
+@keyframes hw-in-up {
+  from {
+    opacity: 0;
+    translate: 0 18px;
+  }
+}
+
+@keyframes hw-in-down {
+  from {
+    opacity: 0;
+    translate: 0 -8px;
+  }
+}
+
+@keyframes hw-in-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes hw-in-start {
+  from {
+    translate: -100% 0;
+  }
+}
+
+@keyframes hw-in-start-rtl {
+  from {
+    translate: 100% 0;
+  }
+}
+
+.hw-anim-sheet {
+  animation: hw-in-up 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hw-anim-backdrop {
+  animation: hw-in-fade 260ms ease-out both;
+}
+
+.hw-anim-drop {
+  animation: hw-in-down 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hw-anim-drawer {
+  animation: hw-in-start 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+[dir='rtl'] .hw-anim-drawer,
+.hw-anim-drawer[dir='rtl'] {
+  animation-name: hw-in-start-rtl;
+}
+
+.hw-anim-toast {
+  animation: hw-in-up 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}

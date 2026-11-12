@@ -1,0 +1,15 @@
+node_modules/
+dist/
+build/
+coverage/
+.agents/
+.specify/
+specs/
+apps/api/src/generated/prisma/
+openapi/openapi.json
+pnpm-lock.yaml
+front/.next/
+front/node_modules/
+front/next-env.d.ts
+# The approved design artifact is a source file, not code to reformat.
+ui/

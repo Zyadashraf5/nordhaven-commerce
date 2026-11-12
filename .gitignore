@@ -1,0 +1,50 @@
+# Dependencies and package-manager state
+node_modules/
+.pnpm-store/
+
+# Build, generated, and test output
+dist/
+build/
+coverage/
+apps/api/src/generated/prisma/
+openapi/*.tmp.json
+front/.next/
+front/out/
+
+# Local environment and secrets (safe examples remain trackable)
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Logs and runtime artifacts
+*.log
+logs/
+tmp/
+temp/
+*.pid
+
+# Local database and container state
+postgres-data/
+.docker/
+
+# Editors and operating systems
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Tool caches
+.eslintcache
+.cache/
+.turbo/
+*.tsbuildinfo
+
+# Per-user local tool settings
+.claude/settings.local.json

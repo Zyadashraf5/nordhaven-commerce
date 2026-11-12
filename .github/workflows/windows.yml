@@ -1,0 +1,37 @@
+name: Windows portability
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  powershell:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    env:
+      DATABASE_URL: postgresql://ci:ci@localhost:5432/nordhaven_ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.23.3
+      - shell: pwsh
+        run: corepack enable; corepack prepare pnpm@12.13.0 --activate
+      - shell: pwsh
+        run: pnpm install --frozen-lockfile
+      - shell: pwsh
+        run: pnpm prisma:generate
+      - shell: pwsh
+        run: pnpm prisma:validate
+      - shell: pwsh
+        run: pnpm verify
+      - shell: pwsh
+        run: docker compose config --quiet
+      - shell: pwsh
+        run: pnpm repo:hygiene
+
+      # This hosted runner checks PowerShell/path portability only. It is not
+      # evidence of acceptance on a qualifying serviced Windows 10 host.

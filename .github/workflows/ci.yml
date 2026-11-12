@@ -1,0 +1,120 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: 22.23.3
+  PNPM_VERSION: 12.13.0
+  DATABASE_URL: postgresql://ci:ci@localhost:5432/nordhaven_ci
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm prisma:generate
+      - run: pnpm prisma:validate
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm boundaries:check
+      - run: pnpm typecheck
+      - run: pnpm test:unit
+      - run: pnpm build
+      - run: pnpm openapi:check
+      - run: pnpm repo:hygiene
+      - run: pnpm audit:prod
+      - run: pnpm audit --audit-level high
+
+  frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '${{ env.NODE_VERSION }}' }
+      - run: corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm front:lint
+      - run: pnpm front:typecheck
+      - run: pnpm front:test
+      - run: pnpm front:build
+
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:18.6-alpine
+        env:
+          POSTGRES_DB: nordhaven_ci_integration
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+        ports: [5432:5432]
+        options: >-
+          --health-cmd "pg_isready -U test -d nordhaven_ci_integration"
+          --health-interval 2s --health-timeout 2s --health-retries 15
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://test:test@localhost:5432/nordhaven_ci_integration
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '${{ env.NODE_VERSION }}' }
+      - run: corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm prisma:generate
+      - run: pnpm prisma:validate
+      - run: pnpm prisma:migrate:deploy
+      - run: pnpm prisma:migrate:deploy
+      - run: pnpm prisma:migrate:status
+      - run: pnpm test:integration
+
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:18.6-alpine
+        env:
+          POSTGRES_DB: nordhaven_ci_e2e
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+        ports: [5432:5432]
+        options: >-
+          --health-cmd "pg_isready -U test -d nordhaven_ci_e2e"
+          --health-interval 2s --health-timeout 2s --health-retries 15
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://test:test@localhost:5432/nordhaven_ci_e2e
+      DATABASE_URL_E2E: postgresql://test:test@localhost:5432/nordhaven_ci_e2e
+      PORT: 3000
+      LOG_LEVEL: silent
+      DATABASE_STARTUP_TIMEOUT_MS: 5000
+      DATABASE_PROBE_TIMEOUT_MS: 1000
+      SHUTDOWN_TIMEOUT_MS: 8000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '${{ env.NODE_VERSION }}' }
+      - run: corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm prisma:generate
+      - run: pnpm prisma:validate
+      - run: pnpm prisma:migrate:deploy
+      - run: pnpm prisma:migrate:deploy
+      - run: pnpm prisma:migrate:status
+      - run: pnpm build
+      - run: pnpm test:e2e
+      - run: pnpm test:process

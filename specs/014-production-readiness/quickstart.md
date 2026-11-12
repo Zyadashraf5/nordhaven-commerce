@@ -1,0 +1,3 @@
+# M14 safe quickstart
+
+Read docs/operations/runbook.md. Confirm explicit owned URLs and 26 migrations before tests. Run verify, integration, E2E and process separately. Run prisma validation/status/drift/checksums and both dependency audits. Build the local image without pushing/deploying. Run the performance probe on owned dev, then the retained restore drill with absolute NORDHAVEN_BACKUP_DIR and safe non-delivering data. Preserve logs and hashes. A High advisory makes readiness fail; original databases remain off limits and production acceptance remains PARTIAL/BLOCKED. Never substitute historical counts for current evidence.

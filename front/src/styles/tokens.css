@@ -1,0 +1,329 @@
+/*
+ * Nordhaven Commerce — design tokens.
+ *
+ * Every value here is taken from the approved Stage 1 boards of the Claude design
+ * artifact (`ui/Nordhaven Commerce — Storefront Design.html`, "Mini style guide v0.2").
+ * Nothing in this file is invented: if a value is not in the approved boards it is
+ * not in the storefront.
+ */
+
+/* ------------------------------------------------------------------ *
+ * Typography
+ * Font files are the subsets that shipped inside the approved design
+ * artifact (SIL Open Font License 1.1 — see front/public/fonts/OFL.md).
+ * ------------------------------------------------------------------ */
+
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/figtree-latin.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/figtree-latin-ext.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/newsreader-normal-latin.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/newsreader-normal-latin-ext.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/newsreader-normal-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+1EA0-1EF9, U+20AB;
+}
+
+@font-face {
+  font-family: 'Newsreader';
+  font-style: italic;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/newsreader-italic-latin.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Newsreader';
+  font-style: italic;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/newsreader-italic-latin-ext.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Newsreader';
+  font-style: italic;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/newsreader-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+1EA0-1EF9, U+20AB;
+}
+
+/* Arabic / RTL support (reserved for a later milestone). */
+@font-face {
+  font-family: 'Markazi Text';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/markazi-text-latin.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Markazi Text';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/markazi-text-arabic.woff2') format('woff2');
+  unicode-range:
+    U+0600-06FF, U+0750-077F, U+0870-0897, U+0898-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011,
+    U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-arabic-500-latin.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-arabic-500-latin-ext.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-arabic-600-latin.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-arabic-600-latin-ext.woff2') format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/ibm-plex-sans-arabic-600-arabic.woff2') format('woff2');
+  unicode-range:
+    U+0600-06FF, U+0750-077F, U+0870-0897, U+0898-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011,
+    U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+/* ------------------------------------------------------------------ *
+ * Tokens
+ * ------------------------------------------------------------------ */
+
+:root {
+  /* Surfaces */
+  --hw-bg-page: #faf8f4;
+  --hw-bg-surface: #ffffff;
+  --hw-bg-muted: #f1ece4;
+  --hw-bg-well: #efe8de;
+  --hw-bg-well-cool: #e6ebe4;
+  --hw-bg-well-hero: #e9e1d6;
+  --hw-bg-well-bundle: #e3e7df;
+  --hw-bg-disabled: #ede8e0;
+  --hw-bg-dark: #242826;
+
+  /* Borders */
+  --hw-border-default: #e2dbcf;
+  --hw-border-strong: #c9c1b4;
+  --hw-border-card: #eae4da;
+  --hw-border-input: #8f877b;
+  --hw-border-on-dark: #4a4e4b;
+  --hw-border-on-muted: #d9d2c6;
+
+  /* Text */
+  --hw-text-primary: #242826;
+  --hw-text-secondary: #3e423f;
+  --hw-text-muted: #5b5f5b;
+  --hw-text-subtle: #4a4e4b;
+  --hw-text-inverse: #faf8f4;
+  --hw-text-inverse-muted: #d6d2ca;
+  /* Solid buttons and badges on a dark fill use pure white in the boards. */
+  --hw-text-on-dark: #ffffff;
+
+  /* Brand + action */
+  --hw-action-primary: #a65f45;
+  --hw-action-primary-hover: #8f5039;
+  --hw-text-offer: #8a4a34;
+  --hw-action-secondary: #242826;
+  --hw-action-secondary-hover: #3a3f3c;
+
+  /* Status */
+  --hw-status-available: #3f6249;
+  --hw-status-attention: #8a5a12;
+  --hw-status-error: #a1362b;
+  /* Darker error text on the error-tinted alert surface (Stage 3 cart boards). */
+  --hw-status-error-strong: #7e2a21;
+  --hw-status-info: #46557a;
+
+  /* Type families */
+  --hw-font-ui: 'Figtree', system-ui, sans-serif;
+  --hw-font-display: 'Newsreader', Georgia, serif;
+  --hw-font-arabic-display: 'Markazi Text', serif;
+  --hw-font-arabic-ui: 'IBM Plex Sans Arabic', sans-serif;
+
+  /* Type scale (Mini style guide v0.2) */
+  --hw-text-display-xl: 72px;
+  --hw-leading-display-xl: 1;
+  --hw-text-heading-1: 40px;
+  --hw-leading-heading-1: 1.1;
+  --hw-text-heading-2: 26px;
+  --hw-leading-heading-2: 1.23;
+  --hw-text-title: 18px;
+  --hw-leading-title: 1.33;
+  --hw-text-body: 16px;
+  --hw-leading-body: 1.6;
+  --hw-text-label: 12px;
+  --hw-leading-label: 1.33;
+  --hw-text-price: 18px;
+  --hw-leading-price: 1.33;
+
+  /* Spacing — 4px base */
+  --hw-space-1: 4px;
+  --hw-space-2: 8px;
+  --hw-space-3: 12px;
+  --hw-space-4: 16px;
+  --hw-space-6: 24px;
+  --hw-space-8: 32px;
+  --hw-space-12: 48px;
+  --hw-space-16: 64px;
+  --hw-space-24: 96px;
+
+  /* Shape */
+  --hw-radius-sm: 4px;
+  --hw-radius-md: 12px;
+  --hw-radius-pill: 999px;
+
+  /* Elevation — one level, overlays only */
+  --hw-shadow-overlay: 0 10px 30px rgba(36, 40, 38, 0.16);
+  --hw-shadow-mega: 0 24px 48px rgba(36, 40, 38, 0.12);
+  --hw-shadow-sheet: 0 24px 64px rgba(36, 40, 38, 0.3);
+  --hw-shadow-toast: 0 12px 32px rgba(36, 40, 38, 0.3);
+
+  /* Layout */
+  --hw-content-max: 1296px;
+  --hw-gutter: clamp(16px, 3.5vw, 48px);
+
+  /* Motion — 160–240ms ease-out */
+  --hw-motion-fast: 160ms;
+  --hw-motion-base: 200ms;
+  --hw-motion-slow: 240ms;
+  --hw-easing: cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --hw-motion-fast: 0ms;
+    --hw-motion-base: 0ms;
+    --hw-motion-slow: 0ms;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Stage 2 tokens (PLP, PDP & bundles — `ui/Stage 2 — Design system,
+ * PLP, PDP.html` foundations board). Additive only: every Stage 1 value
+ * above keeps its meaning so the approved homepage is untouched.
+ * ------------------------------------------------------------------ */
+:root {
+  /* Status chip backgrounds ("available on #E6EBE4" and friends). */
+  --hw-status-available-bg: #e6ebe4;
+  --hw-status-attention-bg: #f6eedc;
+  --hw-status-error-bg: #f7e6e2;
+  --hw-status-info-bg: #e7e9f1;
+  --hw-status-unavailable-bg: #ede8e0;
+
+  /* Layers (board-01): scrim, stacking order, overlay radius + shadow. */
+  --hw-bg-scrim: rgba(36, 40, 38, 0.45);
+  --hw-z-sticky: 10;
+  --hw-z-dropdown: 20;
+  --hw-z-overlay: 40;
+  --hw-z-toast: 50;
+  --hw-radius-overlay: 16px;
+  --hw-shadow-drawer: 0 12px 32px rgba(36, 40, 38, 0.14);
+
+  /* Focus: a 2px charcoal ring with a 3px ivory gap (board-01). */
+  --hw-focus-ring: 0 0 0 3px var(--hw-bg-page), 0 0 0 5px #242826;
+}
+
+/* Nordhaven portfolio identity: forest, mist, ink and warm sand. */
+:root {
+  --hw-bg-page: #f6f7f2;
+  --hw-bg-surface: #ffffff;
+  --hw-bg-well: #e9ede5;
+  --hw-bg-well-cool: #e0ece7;
+  --hw-bg-well-hero: #e7eee9;
+  --hw-bg-well-bundle: #e3ebe5;
+  --hw-bg-dark: #153e35;
+  --hw-text-primary: #193b32;
+  --hw-text-secondary: #455c52;
+  --hw-text-muted: #56685e;
+  --hw-action-primary: #245b48;
+  --hw-action-primary-hover: #173f32;
+  --hw-text-offer: #805422;
+  --hw-border-default: #d4ded3;
+  --hw-border-card: #dce4d9;
+  --hw-radius-md: 20px;
+  --hw-radius-pill: 10px;
+}

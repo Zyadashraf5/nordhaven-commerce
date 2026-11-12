@@ -1,0 +1,3 @@
+// source: modules/example/api/example.controller.ts
+import { HealthModule } from '../../health';
+void HealthModule;

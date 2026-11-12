@@ -1,0 +1,2 @@
+CREATE TABLE "shipping_configuration_events" ("id" UUID NOT NULL, "target" TEXT NOT NULL, "actor_user_id" UUID, "before" JSONB NOT NULL, "after" JSONB NOT NULL, "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, CONSTRAINT "shipping_configuration_events_pkey" PRIMARY KEY ("id"));
+CREATE INDEX "shipping_configuration_events_target_created_at_id_idx" ON "shipping_configuration_events"("target", "created_at", "id");

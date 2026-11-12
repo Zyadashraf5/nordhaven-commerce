@@ -1,0 +1,165 @@
+.section {
+  width: 100%;
+  max-width: calc(var(--hw-content-max) + 2 * var(--hw-gutter));
+  margin-inline: auto;
+  padding: 40px var(--hw-gutter) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.headingRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.headingGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.heading {
+  margin: 0;
+  font-family: var(--hw-font-display);
+  font-weight: 400;
+  font-size: 32px;
+  letter-spacing: -0.01em;
+}
+
+.allLink {
+  font-size: 15px;
+  font-weight: 600;
+  text-underline-offset: 4px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+  gap: 14px;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--hw-text-primary);
+}
+
+.tileImageWrap {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--hw-radius-sm);
+  overflow: hidden;
+  background: var(--hw-bg-well);
+  display: block;
+}
+
+.tileImageCool {
+  background: var(--hw-bg-well-cool);
+}
+
+.tileImage {
+  object-fit: cover;
+  transform-origin: 50% 60%;
+  transition: transform var(--hw-motion-slow) var(--hw-easing);
+}
+
+.tile:hover .tileImage {
+  transform: scale(1.04);
+}
+
+.tileLabel {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.allTile {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--hw-radius-sm);
+  background: var(--hw-bg-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--hw-font-display);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--hw-text-offer);
+  text-align: center;
+}
+
+/*
+ * The wide layout shows the seven category tiles of the approved board; the
+ * narrow layout adds an "All →" tile at the end of the scroller.
+ */
+.allTileLink {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .section {
+    padding: 32px 0 0;
+    gap: 14px;
+  }
+
+  .headingRow {
+    padding: 0 14px;
+  }
+
+  .heading {
+    font-size: 26px;
+    letter-spacing: normal;
+  }
+
+  .allLink {
+    font-size: 14px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(2, auto);
+    grid-auto-columns: 112px;
+    gap: 12px 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 14px;
+  }
+
+  .grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tile {
+    gap: 6px;
+    font-size: 13px;
+    min-width: 0;
+  }
+
+  .tileLabel {
+    font-size: 13px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .tileImageWrap,
+  .allTile {
+    width: 112px;
+    height: 112px;
+    aspect-ratio: auto;
+  }
+
+  .allTileLink {
+    display: flex;
+  }
+
+  .allTile {
+    font-size: 17px;
+  }
+}

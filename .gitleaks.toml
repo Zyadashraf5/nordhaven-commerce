@@ -1,0 +1,13 @@
+title = "Nordhaven fixture exceptions"
+[extend]
+useDefault = true
+[[allowlists]]
+description = "Reviewed synthetic authentication and idempotency fixtures; no runtime credentials"
+regexTarget = "secret"
+regexes = [
+  '^GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ$',
+  '^Replacement-Passphrase-2$',
+  '^Wrong-Passphrase-9$',
+  '^Final-Passphrase-4$',
+  '^e2e-refund-key-too-much$',
+]

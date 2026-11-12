@@ -1,0 +1,50 @@
+### AccountsResponse
+{"additionalProperties":false,"properties":{"nextCursor":{"nullable":true,"type":"string"},"users":{"items":{"$ref":"#/components/schemas/UserSummaryResponse"},"type":"array"}},"required":["users","nextCursor"],"type":"object"}
+### ChallengeCredentialResponse
+{"additionalProperties":false,"properties":{"expiresAt":{"format":"date-time","type":"string"},"purpose":{"enum":["MFA_VERIFICATION","MFA_ENROLLMENT"],"type":"string"},"token":{"description":"Single-use challenge token for the next step.","type":"string"}},"required":["token","purpose","expiresAt"],"type":"object"}
+### ChangePasswordRequest
+{"additionalProperties":false,"properties":{"currentPassword":{"format":"password","maxLength":256,"type":"string"},"newPassword":{"format":"password","maxLength":256,"minLength":12,"type":"string"}},"required":["currentPassword","newPassword"],"type":"object"}
+### EnrollmentConfirmationRequest
+{"additionalProperties":false,"properties":{"challengeToken":{"maxLength":512,"type":"string"},"code":{"pattern":"^[0-9]{6}$","type":"string"}},"required":["challengeToken","code"],"type":"object"}
+### EnrollmentConfirmationResponse
+{"additionalProperties":false,"properties":{"confirmedAt":{"format":"date-time","type":"string"},"recoveryCodes":{"description":"Single-use recovery codes. Returned exactly once.","items":{"type":"string"},"type":"array"},"status":{"enum":["MFA_ENROLLED"],"type":"string"}},"required":["status","recoveryCodes","confirmedAt"],"type":"object"}
+### EnrollmentResponse
+{"additionalProperties":false,"properties":{"algorithm":{"enum":["SHA1"],"type":"string"},"digits":{"enum":[6],"type":"number"},"expiresAt":{"format":"date-time","type":"string"},"issuer":{"type":"string"},"otpauthUri":{"type":"string"},"period":{"enum":[30],"type":"number"},"secret":{"description":"Base32 shared secret. Never returned again.","type":"string"}},"required":["secret","otpauthUri","algorithm","digits","period","issuer","expiresAt"],"type":"object"}
+### ErrorResponse
+{"additionalProperties":false,"properties":{"code":{"pattern":"^[A-Z][A-Z0-9_]*$","type":"string"},"correlationId":{"format":"uuid","type":"string"},"details":{"description":"Optional non-sensitive validation details.","oneOf":[{"type":"object"},{"items":{},"type":"array"}]},"message":{"type":"string"},"statusCode":{"maximum":599,"minimum":400,"type":"number"}},"required":["statusCode","code","message","correlationId"],"type":"object"}
+### LivenessResponse
+{"additionalProperties":false,"properties":{"status":{"enum":["ok"],"example":"ok","type":"string"}},"required":["status"],"type":"object"}
+### MfaChallengeRequest
+{"additionalProperties":false,"properties":{"challengeToken":{"maxLength":512,"type":"string"}},"required":["challengeToken"],"type":"object"}
+### MfaVerificationRequest
+{"additionalProperties":false,"properties":{"challengeToken":{"maxLength":512,"type":"string"},"code":{"pattern":"^[0-9]{6}$","type":"string"},"recoveryCode":{"maxLength":40,"type":"string"}},"required":["challengeToken"],"type":"object"}
+### PrincipalResponse
+{"additionalProperties":false,"properties":{"role":{"enum":["CUSTOMER","ADMIN"],"type":"string"},"session":{"$ref":"#/components/schemas/SessionSummaryResponse"},"user":{"$ref":"#/components/schemas/UserSummaryResponse"}},"required":["user","role","session"],"type":"object"}
+### ReadinessChecks
+{"additionalProperties":false,"properties":{"database":{"enum":["up"],"example":"up","type":"string"}},"required":["database"],"type":"object"}
+### ReadinessResponse
+{"additionalProperties":false,"properties":{"checks":{"$ref":"#/components/schemas/ReadinessChecks"},"status":{"enum":["ok"],"example":"ok","type":"string"}},"required":["status","checks"],"type":"object"}
+### RegisterRequest
+{"additionalProperties":false,"properties":{"email":{"format":"email","maxLength":254,"type":"string"},"password":{"format":"password","maxLength":256,"minLength":12,"type":"string"}},"required":["email","password"],"type":"object"}
+### RegistrationResponse
+{"additionalProperties":false,"properties":{"user":{"$ref":"#/components/schemas/UserSummaryResponse"}},"required":["user"],"type":"object"}
+### ResetAcceptedResponse
+{"additionalProperties":false,"properties":{"status":{"enum":["ACCEPTED"],"type":"string"}},"required":["status"],"type":"object"}
+### ResetConfirmationRequest
+{"additionalProperties":false,"properties":{"newPassword":{"format":"password","maxLength":256,"minLength":12,"type":"string"},"token":{"maxLength":512,"type":"string"}},"required":["token","newPassword"],"type":"object"}
+### ResetRequestRequest
+{"additionalProperties":false,"properties":{"email":{"format":"email","maxLength":254,"type":"string"}},"required":["email"],"type":"object"}
+### SessionCredentialResponse
+{"additionalProperties":false,"properties":{"expiresAt":{"format":"date-time","type":"string"},"token":{"description":"Opaque 256-bit session credential. Returned exactly once and never again.","type":"string"},"tokenType":{"enum":["Bearer"],"type":"string"}},"required":["token","tokenType","expiresAt"],"type":"object"}
+### SessionResponse
+{"additionalProperties":false,"properties":{"expiresAt":{"format":"date-time","type":"string"},"status":{"enum":["AUTHENTICATED"],"type":"string"},"token":{"description":"Opaque 256-bit session credential. Returned exactly once and never again.","type":"string"},"tokenType":{"enum":["Bearer"],"type":"string"},"user":{"$ref":"#/components/schemas/UserSummaryResponse"}},"required":["status","token","tokenType","expiresAt","user"],"type":"object"}
+### SessionSummaryResponse
+{"additionalProperties":false,"properties":{"clientLabel":{"nullable":true,"type":"string"},"createdAt":{"format":"date-time","type":"string"},"current":{"type":"boolean"},"expiresAt":{"format":"date-time","type":"string"},"id":{"format":"uuid","type":"string"},"lastUsedAt":{"format":"date-time","type":"string"}},"required":["id","createdAt","lastUsedAt","expiresAt","clientLabel","current"],"type":"object"}
+### SessionsResponse
+{"additionalProperties":false,"properties":{"sessions":{"items":{"$ref":"#/components/schemas/SessionSummaryResponse"},"type":"array"}},"required":["sessions"],"type":"object"}
+### SignInRequest
+{"additionalProperties":false,"properties":{"email":{"format":"email","maxLength":254,"type":"string"},"password":{"format":"password","maxLength":256,"type":"string"}},"required":["email","password"],"type":"object"}
+### SignInResponse
+{"additionalProperties":false,"properties":{"challenge":{"$ref":"#/components/schemas/ChallengeCredentialResponse"},"session":{"$ref":"#/components/schemas/SessionCredentialResponse"},"status":{"enum":["AUTHENTICATED","MFA_REQUIRED","MFA_ENROLLMENT_REQUIRED"],"type":"string"},"user":{"$ref":"#/components/schemas/UserSummaryResponse"}},"required":["status"],"type":"object"}
+### UserSummaryResponse
+{"additionalProperties":false,"properties":{"createdAt":{"format":"date-time","type":"string"},"email":{"format":"email","type":"string"},"id":{"format":"uuid","type":"string"},"role":{"enum":["CUSTOMER","ADMIN"],"type":"string"}},"required":["id","email","role","createdAt"],"type":"object"}

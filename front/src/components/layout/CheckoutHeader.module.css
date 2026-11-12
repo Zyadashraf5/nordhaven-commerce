@@ -1,0 +1,116 @@
+.header {
+  background: var(--hw-bg-page);
+  border-bottom: 1px solid var(--hw-border-default);
+}
+
+.inner {
+  width: 100%;
+  max-width: calc(var(--hw-content-max) + 2 * var(--hw-gutter));
+  margin-inline: auto;
+  padding: 16px var(--hw-gutter);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.wordmark {
+  order: -1;
+  display: flex;
+  flex-direction: column;
+  margin-inline-end: auto;
+  text-decoration: none;
+  color: var(--hw-text-primary);
+  line-height: 1;
+}
+
+.wordmarkMain {
+  font-family: var(--hw-font-display);
+  font-size: 30px;
+  font-weight: 450;
+  letter-spacing: -0.015em;
+}
+
+.wordmarkSub {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--hw-text-muted);
+  padding-top: 3px;
+}
+
+.secure {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--hw-text-secondary);
+}
+
+.back {
+  order: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--hw-text-primary);
+  text-decoration: none;
+}
+
+/* Narrow board: back chevron | centred wordmark | "Secure". */
+@media (max-width: 1023px) {
+  .inner {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr) 96px;
+    gap: 0;
+    padding: 4px 6px;
+  }
+
+  .back {
+    order: 0;
+    width: 44px;
+    justify-content: center;
+  }
+
+  .backText {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .wordmark {
+    order: 0;
+    align-items: center;
+    margin-inline-end: 0;
+  }
+
+  .wordmarkMain {
+    font-size: 25px;
+  }
+
+  .wordmarkSub {
+    font-size: 8px;
+    padding-inline-start: 0.34em;
+  }
+
+  .secure {
+    justify-self: end;
+    padding-inline-end: 8px;
+    font-size: 13px;
+  }
+
+  /* The board reads "Secure"; keep "checkout" for screen readers. */
+  .secureRest {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
